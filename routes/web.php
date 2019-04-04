@@ -1,4 +1,5 @@
 <?php
+use App\Models\TopicType;
 
 $router->get('/', function () use ($router) {
     return 'ok';
@@ -19,7 +20,7 @@ $router->group([
 ], function($router) {
 
     $router->get('auth', function () use ($router) {
-        return 'auth ok?';
+        return TopicType::get();
     });
 
 });
