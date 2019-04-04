@@ -19,8 +19,16 @@ $router->group([
     // 'middleware' => 'auth'
 ], function($router) {
 
-    $router->get('auth', function () use ($router) {
-        return TopicType::get();
+    $router->group(['prefix' => 'task'], function($router) {
+
+        $router->get('/', 'TaskController@list');
+
+    });
+
+    $router->group(['prefix' => 'topic'], function($router) {
+
+        $router->get('/', 'TopicController@list');
+
     });
 
 });
