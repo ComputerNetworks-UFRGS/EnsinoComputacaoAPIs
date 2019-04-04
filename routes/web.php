@@ -1,8 +1,7 @@
 <?php
-use App\User;
 
 $router->get('/', function () use ($router) {
-    return User::get();
+    return 'ok';
 });
 
 $router->get('/version', function () use ($router) {
@@ -14,8 +13,13 @@ $router->group(['prefix' => 'auth'], function($router) {
     $router->post('register', 'AuthController@register');
 });
 
-$router->get('/auth', ['middleware' => 'auth', function () use ($router) {
-    return 'auth ok?';
-}]);
+$router->group([
+    'prefix' => 'api/v1',
+    // 'middleware' => 'auth'
+], function($router) {
 
+    $router->get('auth', function () use ($router) {
+        return 'auth ok?';
+    });
 
+});
