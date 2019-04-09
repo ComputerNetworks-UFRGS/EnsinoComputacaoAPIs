@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    // protected $table = '';
+    const TYPE_BASIC = 1;
 }

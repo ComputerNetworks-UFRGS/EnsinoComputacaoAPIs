@@ -25,9 +25,14 @@ class AuthController extends Controller
         if($user && Hash::check($request->password, $user->password)) {
             $user->api_token = Str::random(80);
             $user->save();
-            return $user->api_token;
+            return response()->json([
+                'name' => $user->name,
+                'token' => $user->api_token,
+            ]);
         }
-        abort(400, 'E-mail ou senha inválida.');
+        return response()->json([
+            'message' => 'E-mail ou senha inválida.',
+        ], 400);
     }
 
     public function register(Request $request)
@@ -42,8 +47,13 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->api_token = Str::random(80);
         $user->save();
-        return 'ok';
+
+        return response()->json([
+            'name' => $user->name,
+            'token' => $user->api_token,
+        ]);
     }
 
 }

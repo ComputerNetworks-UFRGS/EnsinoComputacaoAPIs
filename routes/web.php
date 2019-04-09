@@ -16,7 +16,7 @@ $router->group(['prefix' => 'auth'], function($router) {
 
 $router->group([
     'prefix' => 'api/v1',
-    // 'middleware' => 'auth'
+    'middleware' => 'auth'
 ], function($router) {
 
     $router->group(['prefix' => 'task'], function($router) {
