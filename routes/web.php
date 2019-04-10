@@ -1,5 +1,4 @@
 <?php
-use App\Models\TopicType;
 
 $router->get('/', function () use ($router) {
     return 'ok';
@@ -16,19 +15,23 @@ $router->group(['prefix' => 'auth'], function($router) {
 
 $router->group([
     'prefix' => 'api/v1',
-    'middleware' => 'auth'
 ], function($router) {
 
     $router->group(['prefix' => 'task'], function($router) {
-
         $router->get('/', 'TaskController@list');
-
     });
 
     $router->group(['prefix' => 'topic'], function($router) {
-
         $router->get('/', 'TopicController@list');
+    });
+
+    $router->group([
+        'middleware' => 'auth',
+    ], function($router) {
+
+        $router->get('/user', 'UserController@detail');
 
     });
+
 
 });
