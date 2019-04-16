@@ -33,6 +33,7 @@ $router->group([
 
             $router->get('/', 'UserController@detail');
             $router->get('/tasks', 'TaskController@userList');
+            $router->post('/tasks', 'TaskController@create');
 
         });
 

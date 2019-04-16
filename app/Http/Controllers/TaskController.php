@@ -20,12 +20,12 @@ class TaskController extends Controller
         return Auth::user()->tasks()->get();
     }
 
-    public function create(StoreTask $request)
+    public function create(Request $request)
+    // public function create(StoreTask $request)
     {
         $task = new Task();
         $task->title = $request->title;
         $task->description = $request->description;
-        $task->user_id = $user_id;
         $task->save();
 
         $user_task = new UserTask();
@@ -34,6 +34,7 @@ class TaskController extends Controller
         $user_task->role = UserTask::ROLE_OWNER;
         $user_task->save();
 
+        return 'ok';
     }
 
     public function update()
