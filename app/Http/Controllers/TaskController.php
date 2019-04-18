@@ -12,12 +12,22 @@ class TaskController extends Controller
 {
     public function list()
     {
-        return Task::paginate(8);
+        return Task::get();
     }
 
     public function userList()
     {
         return Auth::user()->tasks()->get();
+    }
+
+    public function detail($id)
+    {
+        return Task::find($id);
+    }
+
+    public function userDetail($id)
+    {
+        return $this->findUserTask($id);
     }
 
     public function create(Request $request)
@@ -37,9 +47,26 @@ class TaskController extends Controller
         return 'ok';
     }
 
-    public function update()
+    public function update(Request $request, $id)
+    // public function create(StoreTask $request, $id)
     {
+        $task = $this->findUserTask($id);
+        $task->title = $request->title;
+        $task->description = $request->description;
+        $task->save();
+    }
 
+    public function delete($id)
+    {
+        $task = $this->findUserTask($id);
+        $task->delete();
+    }
+
+    private function findUserTask($id)
+    {
+        return Auth::user()->tasks()
+            ->where('user_id', Auth::user()->id)
+            ->find($id);
     }
 
 }

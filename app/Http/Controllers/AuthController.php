@@ -22,6 +22,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $user = User::where('email', $request->email)->first();
+
         if($user && Hash::check($request->password, $user->password)) {
             $user->api_token = Str::random(80);
             $user->save();
@@ -30,6 +31,7 @@ class AuthController extends Controller
                 'token' => $user->api_token,
             ]);
         }
+
         return response()->json([
             'message' => 'E-mail ou senha inválida.',
         ], 400);

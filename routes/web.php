@@ -13,17 +13,18 @@ $router->group(['prefix' => 'auth'], function($router) {
     $router->post('register', 'AuthController@register');
 });
 
-$router->group(['prefix' => 'task'], function($router) {
-    $router->get('/', 'TaskController@list');
-});
-
-$router->group(['prefix' => 'topic'], function($router) {
-    $router->get('/', 'TopicController@list');
-});
+// $router->group(['prefix' => 'topic'], function($router) {
+//     $router->get('/', 'TopicController@list');
+// });
 
 $router->group([
     'prefix' => 'api/v1',
 ], function($router) {
+
+    $router->group(['prefix' => 'tasks'], function($router) {
+        $router->get('/', 'TaskController@list');
+        $router->get('/{id}', 'TaskController@detail');
+    });
 
     $router->group([
         'middleware' => 'auth',
@@ -33,7 +34,10 @@ $router->group([
 
             $router->get('/', 'UserController@detail');
             $router->get('/tasks', 'TaskController@userList');
+            $router->get('/tasks/{id}', 'TaskController@userDetail');
             $router->post('/tasks', 'TaskController@create');
+            $router->put('/tasks/{id}', 'TaskController@update');
+            $router->delete('/tasks/{id}', 'TaskController@delete');
 
         });
 
