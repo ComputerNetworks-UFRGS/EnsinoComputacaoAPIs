@@ -18,11 +18,15 @@ class CreateTableSkills extends Migration
             $table->char('code', 32);
             $table->text('name');
             $table->integer('sequential_number')->default(1);
+            $table->unsignedInteger('learning_stage_id');
+            $table->unsignedInteger('age_group_id');
+            $table->unsignedInteger('topic_id');
             $table->timestamps();
 
-            $table->integer('learning_stage_id');
-            $table->integer('age_group_id');
-            $table->integer('topic_id');
+            $table->foreign('learning_stage_id')->references('id')->on('learning_stages');
+            $table->foreign('age_group_id')->references('id')->on('age_groups');
+            $table->foreign('topic_id')->references('id')->on('topics');
+
         });
     }
 

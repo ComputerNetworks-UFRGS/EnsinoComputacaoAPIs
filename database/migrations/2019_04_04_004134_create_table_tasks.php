@@ -17,6 +17,7 @@ class CreateTableTasks extends Migration
             $table->increments('id');
             $table->text('title');
             $table->text('description');
+            $table->integer('type')->default(1);
             $table->timestamps();
         });
     }

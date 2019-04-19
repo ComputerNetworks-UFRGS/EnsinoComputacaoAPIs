@@ -14,12 +14,16 @@ class CreateTableUserTasks extends Migration
     public function up()
     {
         Schema::create('user_tasks', function (Blueprint $table) {
-            $table->integer('user_id');
-            $table->integer('task_id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('task_id');
             $table->integer('role');
             $table->timestamps();
 
             $table->primary(['user_id', 'task_id']);
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('task_id')->references('id')->on('tasks');
+
         });
     }
 

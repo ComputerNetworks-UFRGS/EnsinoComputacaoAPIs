@@ -20,10 +20,14 @@ class CreateTableTopics extends Migration
             $table->text('description')->nullable();
             $table->text('recommended_approach')->nullable();
             $table->text('usage_suggestion')->nullable();
+            $table->unsignedInteger('type_id');
+            $table->unsignedInteger('parent_id')->nullable();
             $table->timestamps();
 
-            $table->integer('type_id');
-            $table->integer('parent_id')->nullable();
+            $table->foreign('type_id')->references('id')->on('topic_types');
+            $table->foreign('parent_id')->references('id')->on('topics');
+
+
         });
     }
 

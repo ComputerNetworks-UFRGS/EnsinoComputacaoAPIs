@@ -14,12 +14,16 @@ class CreateTableTaskSkills extends Migration
     public function up()
     {
         Schema::create('task_skills', function (Blueprint $table) {
-            $table->integer('task_id');
-            $table->integer('skill_id');
+            $table->unsignedInteger('task_id');
+            $table->unsignedInteger('skill_id');
             $table->integer('type');
             $table->timestamps();
 
             $table->primary(['task_id', 'skill_id']);
+
+            $table->foreign('task_id')->references('id')->on('tasks');
+            $table->foreign('skill_id')->references('id')->on('skills');
+
         });
     }
 

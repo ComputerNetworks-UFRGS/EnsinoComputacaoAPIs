@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableAgeGroups extends Migration
+class CreateTableTopicTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateTableAgeGroups extends Migration
      */
     public function up()
     {
-        Schema::create('age_groups', function (Blueprint $table) {
+        Schema::create('topic_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('code', 4);
             $table->string('name');
-            $table->float('age_from');
-            $table->float('age_to');
-            $table->unsignedInteger('learning_stage_id');
+            $table->text('description')->nullable();
+            $table->tinyInteger('is_head')->default(0);
+            $table->tinyInteger('is_leaf')->default(0);
+            $table->unsignedInteger('learning_stage_id')->default(0);
             $table->timestamps();
 
             $table->foreign('learning_stage_id')->references('id')->on('learning_stages');
+
         });
     }
 
@@ -33,6 +34,6 @@ class CreateTableAgeGroups extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('age_groups');
+        Schema::dropIfExists('topic_types');
     }
 }
