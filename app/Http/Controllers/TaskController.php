@@ -11,9 +11,17 @@ use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    public function list()
+    public function list(Request $req)
     {
-        return Task::get();
+        return Task::when($req->skills, function($query) use ($req) {
+            $skills = explode(',', $req->skills);
+            $skills = array_map(function($i) {
+                return (int) $i;
+            }, $skills);
+            $query->whereHas('taskSkill', function($query) use($skills) {
+                $query->whereIn('skill_id', $skills);
+            });
+        })->get();
     }
 
     public function userList()
