@@ -57,53 +57,47 @@ class SkillController extends Controller
                 'objeto.id as objeto_id',
                 'objeto.name as objeto_nome',
                 's.id AS id',
-                's.name AS title')
-            ->orderByRaw('s.sequential_number')
+                's.name AS name',
+                's.code AS code')
+            ->orderBy('id')
             ->get();
 
 
-        $tree_struct = ['eixo', 'objeto'];
+        $tree_struct = ['objeto', 'eixo']; // leaf to head order
 
-        $depth = 0;
-        $toRemove = [];
+        $to_remove = [];
         foreach($tree_struct as $tree_node) {
-            $toRemove[] = $tree_node . '_id';
-            $toRemove[] = $tree_node . '_nome';
+            $to_remove[] = $tree_node . '_id';
+            $to_remove[] = $tree_node . '_nome';
         }
 
-        $groupFn = function($nodes) use(&$groupFn, $tree_struct, &$depth, $toRemove) {
+        $groupFn = function($nodes, $depth) use(&$groupFn, $tree_struct, $to_remove) {
 
-            $height = count($tree_struct);
+            if($depth > 0) {
 
-            if($depth < $height) {
+                $id = $tree_struct[$depth - 1] . '_id';
+                $title = $tree_struct[$depth - 1] . '_nome';
 
-                $id = $tree_struct[$depth] . '_id';
-                $title = $tree_struct[$depth] . '_nome';
-
-                $depth++;
-                $groupedNodes = $nodes->groupBy($id)
-                    ->map(function($items, $key) use(&$groupFn, $id, $title) {
+                return $nodes->groupBy($id)
+                    ->map(function($items, $key) use(&$groupFn, $id, $title, $depth) {
                         return [
                             'id' => $items[0]->{$id},
                             'title' => $items[0]->{$title},
-                            'items' => $groupFn($items),
+                            'items' => $groupFn($items, $depth - 1),
                         ];
                     });
-                $depth--;
-
-                return $groupedNodes;
 
             } else {
 
-                return $nodes->map(function($item) use($toRemove) {
-                    return collect($item)->except($toRemove);
+                return $nodes->map(function($item) use($to_remove) {
+                    return collect($item)->except($to_remove);
                 });
 
             }
 
         };
 
-        return $groupFn($nodes);
+        return $groupFn($nodes, count($tree_struct));
     }
 
 }
