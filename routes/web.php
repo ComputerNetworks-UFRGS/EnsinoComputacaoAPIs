@@ -18,7 +18,7 @@ $router->group([
         $router->get('/{id}', 'TaskController@detail');
     });
 
-    $router->get('/skills', 'SkillController@list');
+    $router->get('/skills/years', 'SkillController@years');
     $router->get('/skills/tree', 'SkillController@tree');
 
     $router->group([

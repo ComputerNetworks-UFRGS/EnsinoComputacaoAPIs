@@ -8,7 +8,8 @@ use App\Models\LearningStage;
 
 class SkillController extends Controller
 {
-    public function list()
+
+    public function years()
     {
         $skills = DB::table('skills AS s')
             ->join('learning_stages AS ls', function($join) {
@@ -59,7 +60,6 @@ class SkillController extends Controller
                 's.id AS id',
                 's.name AS name',
                 's.code AS code')
-            ->orderBy('id')
             ->get();
 
 
@@ -85,7 +85,7 @@ class SkillController extends Controller
                             'title' => $items[0]->{$title},
                             'items' => $groupFn($items, $depth - 1),
                         ];
-                    });
+                    })->sortBy('title')->values();
 
             } else {
 
