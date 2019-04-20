@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\UserTask;
 use App\Http\Requests\StoreTask;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
