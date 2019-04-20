@@ -19,6 +19,7 @@ $router->group([
     });
 
     $router->get('/skills', 'SkillController@list');
+    $router->get('/skills/tree', 'SkillController@tree');
 
     $router->group([
         'middleware' => 'auth',
