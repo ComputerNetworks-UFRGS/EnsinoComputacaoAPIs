@@ -21,6 +21,11 @@ $router->group([
     $router->get('/skills/years', 'SkillController@years');
     $router->get('/skills/tree', 'SkillController@tree');
 
+    $router->group(['prefix' => 'graphs'], function($router) {
+        $router->get('/', 'GraphController@list');
+        $router->get('/{id}', 'GraphController@detail');
+    });
+
     $router->group([
         'middleware' => 'auth',
     ], function($router) {
