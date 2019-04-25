@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\UserTask;
+use App\Models\TaskSkill;
 use App\Http\Requests\StoreTask;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,7 @@ class TaskController extends Controller
         $task = new Task();
         $task->title = $request->title;
         $task->description = $request->description;
+        $task->is_plugged = $request->is_plugged;
         $task->save();
 
         $user_task = new UserTask();
@@ -52,6 +54,14 @@ class TaskController extends Controller
         $user_task->task_id = $task->id;
         $user_task->role = UserTask::ROLE_OWNER;
         $user_task->save();
+
+        if($request->skill) { # TODO: remover... deve ser obrigatório na requisição
+            $task_skill = new TaskSkill();
+            $task_skill->task_id = $task->id;
+            $task_skill->skill_id = $request->skill;
+            $task_skill->type = TaskSkill::TYPE_PRIMARY;
+            $task_skill->save();
+        }
 
         return 'ok';
     }
@@ -62,6 +72,12 @@ class TaskController extends Controller
         $task = $this->findUserTask($id);
         $task->title = $request->title;
         $task->description = $request->description;
+        $task->is_plugged = $request->is_plugged;
+
+        if($request->skill) { # TODO: remover... deve ser obrigatório na requisição
+            // TODO:
+        }
+
         $task->save();
     }
 
