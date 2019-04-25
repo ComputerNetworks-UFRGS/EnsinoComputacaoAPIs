@@ -21,8 +21,14 @@ class CreateTableTaskSkills extends Migration
 
             $table->primary(['task_id', 'skill_id']);
 
-            $table->foreign('task_id')->references('id')->on('tasks');
-            $table->foreign('skill_id')->references('id')->on('skills');
+            $table->foreign('task_id')
+                ->references('id')->on('tasks')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');;
+            $table->foreign('skill_id')
+                ->references('id')->on('skills')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');;
 
         });
     }

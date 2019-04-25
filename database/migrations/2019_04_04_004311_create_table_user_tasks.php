@@ -21,8 +21,14 @@ class CreateTableUserTasks extends Migration
 
             $table->primary(['user_id', 'task_id']);
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('task_id')->references('id')->on('tasks');
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->foreign('task_id')
+                ->references('id')->on('tasks')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
         });
     }
