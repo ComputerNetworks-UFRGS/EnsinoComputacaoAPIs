@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\UserTask;
 
 class Task extends Model
 {
@@ -11,6 +13,11 @@ class Task extends Model
     public function taskSkill()
     {
         return $this->hasMany(TaskSkill::class);
+    }
+
+    public function userTask()
+    {
+        return $this->hasMany(UserTask::class);
     }
 
     public function mainSkill()
@@ -47,6 +54,23 @@ class Task extends Model
         $task_skill->skill_id = $skill_id;
         $task_skill->type = TaskSkill::TYPE_PRIMARY;
         $task_skill->save();
+    }
+
+    public function creator()
+    {
+        $user_task = $this->userTask()
+            ->where('task_id', $this->id)
+            ->where('role', UserTask::ROLE_OWNER)
+            ->first();
+
+        if($user_task) {
+            $user_id = $user_task->user_id;
+            return User::find($user_task->user_id)->only([
+                'id',
+                'name'
+            ]);
+        }
+        return false;
     }
 
 }

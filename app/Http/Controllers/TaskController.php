@@ -37,13 +37,17 @@ class TaskController extends Controller
 
     public function detail($id)
     {
-        return Task::find($id);
+        $task = Task::find($id);
+        $task->skill = $task->mainSkill();
+        $task->user = $task->creator();
+        return $task;
     }
 
     public function userDetail($id)
     {
         $task = $this->findUserTask($id);
         $task->skill = $task->mainSkill();
+        $task->user = $task->creator();
         return $task;
     }
 
