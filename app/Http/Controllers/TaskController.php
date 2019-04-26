@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\UserTask;
 use App\Models\TaskSkill;
+use App\Models\Skill;
 use App\Http\Requests\StoreTask;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,11 @@ class TaskController extends Controller
 
     public function userList()
     {
-        return Auth::user()->tasks()->get();
+        $tasks = Auth::user()->tasks()->get();
+        foreach($tasks as $task) {
+            $task->skill = $task->mainSkill();
+        }
+        return $tasks;
     }
 
     public function detail($id)
@@ -37,7 +42,9 @@ class TaskController extends Controller
 
     public function userDetail($id)
     {
-        return $this->findUserTask($id);
+        $task = $this->findUserTask($id);
+        $task->skill = $task->mainSkill();
+        return $task;
     }
 
     public function create(Request $request)
@@ -55,12 +62,8 @@ class TaskController extends Controller
         $user_task->role = UserTask::ROLE_OWNER;
         $user_task->save();
 
-        if($request->skill) { # TODO: remover... deve ser obrigatório na requisição
-            $task_skill = new TaskSkill();
-            $task_skill->task_id = $task->id;
-            $task_skill->skill_id = $request->skill;
-            $task_skill->type = TaskSkill::TYPE_PRIMARY;
-            $task_skill->save();
+        if($request->skill) {
+            $task->addSkill($request->skill);
         }
 
         return 'ok';
@@ -74,8 +77,9 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->is_plugged = $request->is_plugged;
 
-        if($request->skill) { # TODO: remover... deve ser obrigatório na requisição
-            // TODO:
+        if($request->skill) {
+            $task->taskSkill()->delete();
+            $task->addSkill($request->skill);
         }
 
         $task->save();
