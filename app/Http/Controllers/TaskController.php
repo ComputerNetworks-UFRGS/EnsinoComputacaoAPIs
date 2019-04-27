@@ -16,13 +16,31 @@ class TaskController extends Controller
     public function list(Request $req)
     {
         return Task::when($req->skills, function($query) use ($req) {
-            $skills = explode(',', $req->skills);
-            $skills = array_map(function($i) {
-                return (int) $i;
-            }, $skills);
-            $query->whereHas('taskSkill', function($query) use($skills) {
-                $query->whereIn('skill_id', $skills);
+
+            $query->whereHas('taskSkill', function($query) use($req) {
+                $query->whereIn('skill_id', $req->skills);
             });
+
+        })->when($req->ages, function($query) use($req) {
+
+            $query->whereHas('skills', function($query) use($req) {
+                $query->whereHas('ageGroup', function($query) use($req) {
+                    $query->whereIn('code', $req->ages);
+                });
+            });
+
+        })->when(isset($req->plugged), function($query) use($req) {
+
+            $query->where('is_plugged', (int) $req->plugged);
+
+        })->when($req->objects, function($query) use($req) {
+
+            $query->whereHas('skills', function($query) use($req) {
+                $query->whereHas('topic', function($query) use($req) {
+                    $query->whereIn('id', $req->objects);
+                });
+            });
+
         })->get();
     }
 

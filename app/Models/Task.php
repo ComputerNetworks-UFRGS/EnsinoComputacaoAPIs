@@ -10,6 +10,11 @@ class Task extends Model
 {
     const TYPE_BASIC = 1;
 
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'task_skills', 'task_id', 'skill_id');
+    }
+
     public function taskSkill()
     {
         return $this->hasMany(TaskSkill::class);
@@ -22,13 +27,8 @@ class Task extends Model
 
     public function mainSkill()
     {
-        $task_skill = $this->taskSkill()->first();
-        if($task_skill) {
-            $skill_id = $task_skill->skill_id;
-            $skill = Skill::with([
-                'ageGroup' => function($join) {
-                    $join->select('id', 'name');
-                }])->find($skill_id);
+        $skill = $this->skills()->first();
+        if($skill) {
 
             $data = $skill->only([
                 'id',

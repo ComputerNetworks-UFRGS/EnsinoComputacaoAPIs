@@ -13,4 +13,9 @@ class Skill extends Model
         return $this->belongsTo(AgeGroup::class);
     }
 
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
+    }
+
 }
