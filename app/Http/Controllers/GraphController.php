@@ -16,13 +16,28 @@ class GraphController extends Controller
 
     public function detail($id)
     {
-
         $graph = Graph::with([
             'nodes',
             'edges'
         ])->find($id);
 
         return $this->formatForDiagramVue($graph);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $graph = Graph::with([
+            'nodes',
+            'edges'
+        ])->find($id);
+
+        $graph->width = $request->width;
+        $graph->height = $request->height;
+        $graph->background = $request->background;
+
+        // $nodes = $request->nodes ?: [];
+        // $edges = $request->edges ?: [];
+
     }
 
     private function formatForDiagramVue($graph)

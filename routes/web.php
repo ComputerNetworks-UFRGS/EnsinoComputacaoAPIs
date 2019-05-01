@@ -24,6 +24,7 @@ $router->group([
     $router->group(['prefix' => 'graphs'], function($router) {
         $router->get('/', 'GraphController@list');
         $router->get('/{id}', 'GraphController@detail');
+        $router->put('/{id}', 'GraphController@update');
     });
 
     $router->group([
