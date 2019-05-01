@@ -14,20 +14,58 @@ class GraphController extends Controller
         return Graph::get();
     }
 
-    public function detail()
+    public function detail($id)
     {
-        $edges = GraphEdge::select('topic_from_id AS from', 'topic_to_id AS to')->get();
 
-        $topics_ids = $edges->pluck('from')
-            ->merge($edges->pluck('to'))
-            ->unique()
-            ->values();
+        $graph = Graph::with([
+            'nodes',
+            'edges'
+        ])->find($id);
 
-        $nodes = Topic::select('id', 'name')->whereIn('id', $topics_ids)->get();
+        return $this->formatForDiagramVue($graph);
+    }
+
+    private function formatForDiagramVue($graph)
+    {
+        $nodes = [];
+        foreach($graph->nodes as $node) {
+            $nodes[] = [
+                'id' => $node->id,
+                'content' => [
+                    'text' => $node->title,
+                    'type' => $node->type,
+                    'topic_id' => $node->topic_id,
+                ],
+                'width' => $node->width,
+                'height' => $node->height,
+                'shape' => $node->shape,
+                'point' => [
+                    'x' => (float) $node->position_x,
+                    'y' => (float) $node->position_y,
+                ],
+            ];
+        }
+
+        $links = [];
+        foreach($graph->edges as $edge) {
+            $links[] = [
+                'id' => "{$edge->graph_id}-{$edge->node_from_id}-{$edge->node_to_id}" ,
+                'source' => $edge->node_from_id,
+                'destination' => $edge->node_to_id,
+                'point' => [
+                    'x' => (float) $node->position_x,
+                    'y' => (float) $node->position_y,
+                ],
+                'color' => $edge->color,
+            ];
+        }
 
         return [
+            'width' => $graph->width,
+            'height' => $graph->height,
+            'background' => $graph->background,
             'nodes' => $nodes,
-            'edges' => $edges,
+            'links' => $links,
         ];
 
     }
