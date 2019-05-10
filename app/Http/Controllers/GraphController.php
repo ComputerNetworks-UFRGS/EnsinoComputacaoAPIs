@@ -26,14 +26,16 @@ class GraphController extends Controller
 
     public function update(Request $request, $id)
     {
+        $graphRequest = $request->graph;
+
         $graph = Graph::with([
             'nodes',
             'edges'
         ])->find($id);
 
-        $graph->width = $request->width;
-        $graph->height = $request->height;
-        $graph->background = $request->background;
+        $graph->width = @$graphRequest->width;
+        $graph->height = @$graphRequest->height;
+        $graph->background = @$graphRequest->background;
 
         // $nodes = $request->nodes ?: [];
         // $edges = $request->edges ?: [];
