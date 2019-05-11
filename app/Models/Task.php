@@ -25,27 +25,27 @@ class Task extends Model
         return $this->hasMany(UserTask::class);
     }
 
-    public function mainSkill()
-    {
-        $skill = $this->skills()->first();
-        if($skill) {
+    // public function mainSkill()
+    // {
+    //     $skill = $this->skills()->first();
+    //     if($skill) {
 
-            $data = $skill->only([
-                'id',
-                'code',
-                'name',
-                'ageGroup'
-            ]);
+    //         $data = $skill->only([
+    //             'id',
+    //             'code',
+    //             'name',
+    //             'ageGroup'
+    //         ]);
 
-            return [
-                'habilidade_id' => $data['id'],
-                'habilidade_nome' => $data['name'],
-                'habilidade_codigo' => $data['code'],
-                'idade_nome' => $data['ageGroup']['name'],
-            ];
-        }
-        return false;
-    }
+    //         return [
+    //             'habilidade_id' => $data['id'],
+    //             'habilidade_nome' => $data['name'],
+    //             'habilidade_codigo' => $data['code'],
+    //             'idade_nome' => $data['ageGroup']['name'],
+    //         ];
+    //     }
+    //     return false;
+    // }
 
     public function addSkill($skill_id)
     {

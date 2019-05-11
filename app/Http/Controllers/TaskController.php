@@ -46,26 +46,53 @@ class TaskController extends Controller
 
     public function userList()
     {
-        $tasks = Auth::user()->tasks()->get();
-        foreach($tasks as $task) {
-            $task->skill = $task->mainSkill();
-        }
-        return $tasks;
+        return Auth::user()
+            ->tasks()
+            // ->with([
+            //     'skills' => function($join) {
+            //         $join->select([
+            //             'id AS habilidade_id',
+            //             'code AS habilidade_codigo',
+            //             'name AS habilidade_nome',
+            //             'age_group_id'
+            //         ]);
+            //         $join->with([
+            //             'ageGroup' => function($join) {
+            //                 $join->select(['id', 'name']);
+            //             }
+            //         ]);
+            //     }
+            // ])
+            ->get();
     }
 
     public function detail($id)
     {
-        $task = Task::find($id);
-        $task->skill = $task->mainSkill();
-        $task->user = $task->creator();
+        $task = Task::with([
+                'skills' => function($join) {
+                    $join->select([
+                        'id AS habilidade_id',
+                        'code AS habilidade_codigo',
+                        'name AS habilidade_nome',
+                        'age_group_id'
+                    ]);
+                    $join->with([
+                        'ageGroup' => function($join) {
+                            $join->select(['id', 'name']);
+                        }
+                    ]);
+                }
+            ])->find($id);
+
+        // $task->user = $task->creator();
+
         return $task;
     }
 
     public function userDetail($id)
     {
         $task = $this->findUserTask($id);
-        $task->skill = $task->mainSkill();
-        $task->user = $task->creator();
+        // $task->user = $task->creator();
         return $task;
     }
 
@@ -84,8 +111,15 @@ class TaskController extends Controller
         $user_task->role = UserTask::ROLE_OWNER;
         $user_task->save();
 
-        if($request->skill) {
-            $task->addSkill($request->skill);
+        if($request->skills) {
+            $data = array_map(function($skill_id) {
+                return [
+                    'type' => TaskSkill::TYPE_PRIMARY,
+                    'skill_id' => (int) $skill_id,
+                ];
+            }, $request->skills);
+
+            $task->skills()->sync($data);
         }
 
         return 'ok';
@@ -99,9 +133,15 @@ class TaskController extends Controller
         $task->description = $request->description;
         $task->is_plugged = $request->is_plugged;
 
-        if($request->skill) {
-            $task->taskSkill()->delete();
-            $task->addSkill($request->skill);
+        if($request->skills) {
+            $data = array_map(function($skill_id) {
+                return [
+                    'type' => TaskSkill::TYPE_PRIMARY,
+                    'skill_id' => (int) $skill_id,
+                ];
+            }, $request->skills);
+
+            $task->skills()->sync($data);
         }
 
         $task->save();
@@ -110,14 +150,33 @@ class TaskController extends Controller
     public function delete($id)
     {
         $task = $this->findUserTask($id);
+        $task->skills()->sync([]);
         $task->delete();
     }
 
     private function findUserTask($id)
     {
-        return Auth::user()->tasks()
+        $task = Auth::user()
+            ->tasks()
+            ->with([
+                'skills' => function($join) {
+                    $join->select([
+                        'id AS habilidade_id',
+                        'code AS habilidade_codigo',
+                        'name AS habilidade_nome',
+                        'age_group_id'
+                    ]);
+                    $join->with([
+                        'ageGroup' => function($join) {
+                            $join->select(['id', 'name']);
+                        }
+                    ]);
+                }
+            ])
             ->where('user_id', Auth::user()->id)
             ->find($id);
+
+        return $task;
     }
 
 }
