@@ -25,10 +25,21 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Here you may define how you wish users to be authenticated for your Lumen
-        // application. The callback which receives the incoming request instance
-        // should return either a User instance or null. You're free to obtain
-        // the User instance via an API token or any other method necessary.
+
+        Gate::define('has-permission', function ($user, $action) {
+            // TODO: get user permissions
+            return 'aaa' == $action;
+        });
+
+        Gate::define('owns-resource', function ($user, $resource) {
+            $users = $resource->users;
+            if($users && count($users) > 0) {
+                return collect($users)->search(function ($item, $key) use($user) {
+                    return $item->id == $user->id;
+                }) !== false;
+            }
+            return false;
+        });
 
         $this->app['auth']->viaRequest('api', function ($request) {
             $api_token = $request->bearerToken();
@@ -36,5 +47,6 @@ class AuthServiceProvider extends ServiceProvider
                 return User::where('api_token', $api_token)->first();
             }
         });
+
     }
 }

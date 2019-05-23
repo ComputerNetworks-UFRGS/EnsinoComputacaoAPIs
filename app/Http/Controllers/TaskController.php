@@ -128,6 +128,11 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     // public function create(StoreTask $request, $id)
     {
+        $task = Task::find($id);
+        $this->authorize('owns-resource', $task);
+        return $task;
+
+
         $task = $this->findUserTask($id);
         $task->title = $request->title;
         $task->description = $request->description;
