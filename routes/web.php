@@ -18,8 +18,10 @@ $router->group([
         $router->get('/{id}', 'TaskController@detail');
     });
 
-    $router->get('/skills/years', 'SkillController@years');
-    $router->get('/skills/tree', 'SkillController@tree');
+    $router->group(['prefix' => 'skills'], function($router) {
+        $router->get('/years', 'SkillController@years');
+        $router->get('/tree', 'SkillController@tree');
+    });
 
     $router->group(['prefix' => 'graphs'], function($router) {
         $router->get('/', 'GraphController@list');
@@ -27,18 +29,17 @@ $router->group([
         $router->put('/{id}', 'GraphController@update');
     });
 
-    $router->group([
-        'middleware' => 'auth',
-    ], function($router) {
+    $router->group(['middleware' => 'auth'], function($router) {
 
         $router->group(['prefix' => 'user'], function($router) {
 
             $router->get('/', 'UserController@detail');
-            $router->get('/tasks', 'TaskController@userList');
-            $router->get('/tasks/{id}', 'TaskController@userDetail');
-            $router->post('/tasks', 'TaskController@create');
-            $router->put('/tasks/{id}', 'TaskController@update');
-            $router->delete('/tasks/{id}', 'TaskController@delete');
+
+            $router->get('/tasks', 'UserTaskController@list');
+            $router->get('/tasks/{id}', 'UserTaskController@detail');
+            $router->post('/tasks', 'UserTaskController@create');
+            $router->put('/tasks/{id}', 'UserTaskController@update');
+            $router->delete('/tasks/{id}', 'UserTaskController@delete');
 
         });
 
