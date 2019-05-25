@@ -13,6 +13,8 @@ $router->group([
     'prefix' => 'api/v1',
 ], function($router) {
 
+    // Public
+
     $router->group(['prefix' => 'tasks'], function($router) {
         $router->get('/', 'TaskController@list');
         $router->get('/{id}', 'TaskController@detail');
@@ -28,6 +30,8 @@ $router->group([
         $router->get('/{id}', 'GraphController@detail');
         $router->put('/{id}', 'GraphController@update');
     });
+
+    // Private
 
     $router->group(['middleware' => 'auth'], function($router) {
 
@@ -53,7 +57,12 @@ $router->group([
 
         $router->get('/permissions', 'PermissionController@list');
 
-    });
+        $router->group(['prefix' => 'users'], function($router) {
+            $router->get('', 'UsersController@list');
+            $router->put('/{id}', 'UsersController@update');
+            $router->delete('/{id}', 'UsersController@delete');
+        });
 
+    });
 
 });
