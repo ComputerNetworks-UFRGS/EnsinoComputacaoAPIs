@@ -56,6 +56,8 @@ class UserTaskController extends Controller
     public function update(Request $request, $id)
     // public function create(StoreTask $request, $id)
     {
+        $this->authorize('has-permission', 'task.edit');
+
         $task = $this->findUserTask($id);
         $task->title = $request->title;
         $task->description = $request->description;
