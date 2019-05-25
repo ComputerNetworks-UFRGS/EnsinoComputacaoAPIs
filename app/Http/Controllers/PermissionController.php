@@ -9,6 +9,8 @@ class PermissionController extends Controller
 {
     public function list()
     {
+        $this->authorize('has-permission', 'users.edit');
+
         return Permission::with('category')->get();
     }
 

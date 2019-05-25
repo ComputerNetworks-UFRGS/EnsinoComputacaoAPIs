@@ -15,11 +15,15 @@ class UserTaskController extends Controller
 {
     public function list()
     {
+        $this->authorize('has-permission', 'task.list');
+
         return Auth::user()->tasks()->get();
     }
 
     public function detail($id)
     {
+        $this->authorize('has-permission', 'task.detail');
+
         $task = $this->findUserTask($id);
         return $task;
     }
@@ -27,6 +31,8 @@ class UserTaskController extends Controller
     public function create(Request $request)
     // public function create(StoreTask $request)
     {
+        $this->authorize('has-permission', 'task.create');
+
         $task = new Task();
         $task->title = $request->title;
         $task->description = $request->description;
@@ -79,6 +85,8 @@ class UserTaskController extends Controller
 
     public function delete($id)
     {
+        $this->authorize('has-permission', 'task.delete');
+
         $task = $this->findUserTask($id);
         $task->skills()->sync([]);
         $task->delete();

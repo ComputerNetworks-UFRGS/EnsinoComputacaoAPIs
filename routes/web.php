@@ -60,7 +60,6 @@ $router->group([
         $router->group(['prefix' => 'users'], function($router) {
             $router->get('', 'UsersController@list');
             $router->put('/{id}', 'UsersController@update');
-            $router->delete('/{id}', 'UsersController@delete');
         });
 
     });
