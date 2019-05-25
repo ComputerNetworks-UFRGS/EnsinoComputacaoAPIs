@@ -43,6 +43,16 @@ $router->group([
 
         });
 
+        $router->group(['prefix' => 'roles'], function($router) {
+            $router->get('', 'RoleController@list');
+            $router->get('/{id}', 'RoleController@detail');
+            $router->post('', 'RoleController@create');
+            $router->put('/{id}', 'RoleController@update');
+            $router->delete('/{id}', 'RoleController@delete');
+        });
+
+        $router->get('/permissions', 'PermissionController@list');
+
     });
 
 
