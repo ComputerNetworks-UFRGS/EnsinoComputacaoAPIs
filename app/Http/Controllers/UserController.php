@@ -10,6 +10,14 @@ class UserController extends Controller
 {
     public function detail(Request $request)
     {
-        return Auth::user();
+        $id = Auth::user()->id;
+        $user = User::with(['role', 'role.permissions'])->find($id);
+        if($user->role && $user->role->permissions) {
+            $user->permissions = $user->role->permissions->map(function($permission) {
+                return $permission->code;
+            });
+        }
+
+        return collect($user)->except('role');
     }
 }

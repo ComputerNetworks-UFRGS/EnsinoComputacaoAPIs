@@ -46,5 +46,4 @@ class RoleController extends Controller
         $role->delete();
     }
 
-
 }
