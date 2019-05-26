@@ -37,6 +37,11 @@ class Task extends Model
         return $this->hasMany(UserTask::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function addSkill($skill_id)
     {
         $task_skill = new TaskSkill();

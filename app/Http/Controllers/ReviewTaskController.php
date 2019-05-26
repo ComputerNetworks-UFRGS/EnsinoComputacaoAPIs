@@ -43,6 +43,14 @@ class ReviewTaskController extends Controller
                         $join->select(['id', 'name']);
                     }
                 ]);
+            },
+            'reviews' => function($join) {
+                $join->orderBy('id', 'DESC');
+                $join->with([
+                    'user' => function($join) {
+                        $join->select(['id', 'name']);
+                    }
+                ]);
             }
         ])
         ->whereIn('status', $this->ids)
