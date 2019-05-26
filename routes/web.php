@@ -49,9 +49,9 @@ $router->group([
         });
 
         $router->group(['prefix' => 'roles'], function($router) {
-            $router->get('', 'RoleController@list');
+            $router->get('/', 'RoleController@list');
             $router->get('/{id}', 'RoleController@detail');
-            $router->post('', 'RoleController@create');
+            $router->post('/', 'RoleController@create');
             $router->put('/{id}', 'RoleController@update');
             $router->delete('/{id}', 'RoleController@delete');
         });
@@ -62,6 +62,15 @@ $router->group([
             $router->get('', 'UsersController@list');
             $router->put('/{id}', 'UsersController@update');
         });
+
+        $router->group(['prefix' => 'reviews'], function($router) {
+
+            $router->get('/', 'ReviewTaskController@list');
+            $router->get('/{id}', 'ReviewTaskController@detail');
+            $router->post('/{id}', 'ReviewTaskController@create');
+
+        });
+
 
     });
 
