@@ -37,6 +37,7 @@ class UserTaskController extends Controller
         $task->title = $request->title;
         $task->description = $request->description;
         $task->is_plugged = $request->is_plugged;
+        $task->status = Task::STATUS_CREATED;
         $task->save();
 
         $user_task = new UserTask();
@@ -68,6 +69,15 @@ class UserTaskController extends Controller
         $task->title = $request->title;
         $task->description = $request->description;
         $task->is_plugged = $request->is_plugged;
+
+        if($task->status == Task::STATUS_DENIED_NEED_FIX) {
+            $task->status = Task::STATUS_REVIEWED;
+        } else if($task->status == Task::STATUS_PUBLISHED) {
+            // TODO: verificar user tem direito de publciar sem revisão...
+
+            $task->status = Task::STATUS_FOR_REVIEW;
+            // TODO: notificar curadores...
+        }
 
         if($request->skills) {
             $data = array_map(function($skill_id) {
@@ -115,6 +125,22 @@ class UserTaskController extends Controller
             ->find($id);
 
         return $task;
+    }
+
+    public function publish($id)
+    {
+        $this->authorize('has-permission', 'task.edit');
+        $task = $this->findUserTask($id);
+
+        // TODO: verificar user tem direito de publciar sem revisão...
+
+        if($task->status == Task::STATUS_CREATED || $task->status == Task::STATUS_REVIEWED) {
+            $task->status = Task::STATUS_FOR_REVIEW;
+            // TODO: notificar curadores...
+            $task->save();
+        }
+
+
     }
 
 }

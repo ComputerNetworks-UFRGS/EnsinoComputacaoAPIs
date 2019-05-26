@@ -35,7 +35,9 @@ class TaskController extends Controller
                 });
             });
 
-        })->get();
+        })
+        ->where('status', Task::STATUS_PUBLISHED)
+        ->get();
     }
 
     public function detail($id)
@@ -54,9 +56,9 @@ class TaskController extends Controller
                         }
                     ]);
                 }
-            ])->find($id);
-
-        // $task->user = $task->creator();
+            ])
+            ->where('status', Task::STATUS_PUBLISHED)
+            ->find($id);
 
         return $task;
     }

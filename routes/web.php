@@ -44,6 +44,7 @@ $router->group([
             $router->post('/tasks', 'UserTaskController@create');
             $router->put('/tasks/{id}', 'UserTaskController@update');
             $router->delete('/tasks/{id}', 'UserTaskController@delete');
+            $router->get('/tasks/{id}/publish', 'UserTaskController@publish');
 
         });
 

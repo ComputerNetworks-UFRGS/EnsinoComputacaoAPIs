@@ -10,11 +10,12 @@ class Task extends Model
 {
     const TYPE_BASIC = 1;
 
+    const STATUS_CREATED = 0;
     const STATUS_FOR_REVIEW = 1;
     const STATUS_DENIED = 2;
     const STATUS_DENIED_NEED_FIX = 3;
-    const STATUS_APPROVED = 4;
-    const STATUS_PUBLISHED = 5;
+    const STATUS_PUBLISHED = 4;
+    const STATUS_REVIEWED = 5;
 
     public function skills()
     {
