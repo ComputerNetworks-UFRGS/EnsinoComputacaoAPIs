@@ -10,6 +10,12 @@ class Task extends Model
 {
     const TYPE_BASIC = 1;
 
+    const STATUS_FOR_REVIEW = 1;
+    const STATUS_DENIED = 2;
+    const STATUS_DENIED_NEED_FIX = 3;
+    const STATUS_APPROVED = 4;
+    const STATUS_PUBLISHED = 5;
+
     public function skills()
     {
         return $this->belongsToMany(Skill::class, 'task_skills', 'task_id', 'skill_id');
