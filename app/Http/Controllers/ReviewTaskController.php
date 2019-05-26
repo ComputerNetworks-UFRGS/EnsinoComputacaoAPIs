@@ -19,7 +19,7 @@ class ReviewTaskController extends Controller
 
     public function list()
     {
-        // TODO: $this->authorize('has-permission', '');
+        TODO: $this->authorize('has-permission', 'review.list');
 
         return Task::whereIn('status', $this->ids)
             ->orderBy('updated_at', 'DESC')
@@ -28,7 +28,7 @@ class ReviewTaskController extends Controller
 
     public function detail($id)
     {
-        // TODO: $this->authorize('has-permission', '');
+        TODO: $this->authorize('has-permission', 'review.detail');
 
         return Task::with([
             'skills' => function($join) {
@@ -59,7 +59,7 @@ class ReviewTaskController extends Controller
 
     public function create(Request $request, $id)
     {
-        // TODO: $this->authorize('has-permission', '');
+        TODO: $this->authorize('has-permission', 'review.evaluate|task.edit');
 
         $review = new Review();
         $review->task_id = (int) $id;
@@ -71,7 +71,7 @@ class ReviewTaskController extends Controller
 
     public function setStatus(Request $request, $id)
     {
-        // TODO: $this->authorize('has-permission', '');
+        TODO: $this->authorize('has-permission', 'review.evaluate');
 
         $ids = [
             Task::STATUS_DENIED,

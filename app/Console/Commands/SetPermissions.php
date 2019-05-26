@@ -107,6 +107,14 @@ class SetPermissions extends Command
                     ['task.delete', 'Excluir'],
                 ]
             ],
+            [
+                'title' => 'Revisão de publicação',
+                'permissions' => [
+                    ['review.list', 'Ver'],
+                    ['review.detail', 'Ver detalhes'],
+                    ['review.evaluate', 'Avaliar'],
+                ]
+            ],
         ];
     }
 
@@ -127,6 +135,25 @@ class SetPermissions extends Command
                     'task.create',
                     'task.edit',
                     'task.delete',
+                    'role.list',
+                    'role.detail',
+                    'review.list',
+                    'review.detail',
+                    'review.evaluate',
+                ]
+            ],
+            [
+                'title' => 'Curador',
+                'description' => 'Criação e curadoria de conteúdo',
+                'permissions' => [
+                    'task.list',
+                    'task.detail',
+                    'task.create',
+                    'task.edit',
+                    'task.delete',
+                    'review.list',
+                    'review.detail',
+                    'review.evaluate',
                 ]
             ],
             [
