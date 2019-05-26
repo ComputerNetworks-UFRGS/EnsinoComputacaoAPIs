@@ -67,7 +67,8 @@ $router->group([
 
             $router->get('/', 'ReviewTaskController@list');
             $router->get('/{id}', 'ReviewTaskController@detail');
-            $router->post('/{id}', 'ReviewTaskController@create');
+            $router->post('/{id}/set-status', 'ReviewTaskController@setStatus');
+            $router->post('/{id}/comment', 'ReviewTaskController@create');
 
         });
 

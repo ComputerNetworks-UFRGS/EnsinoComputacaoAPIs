@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\Review;
+use Auth;
 
 class ReviewTaskController extends Controller
 {
@@ -51,6 +53,18 @@ class ReviewTaskController extends Controller
     {
         // TODO: $this->authorize('has-permission', '');
 
+        $review = new Review();
+        $review->task_id = (int) $id;
+        $review->user_id = Auth::user()->id;
+        $review->comment = $request->comment;
+        $review->save();
+
+    }
+
+    public function setStatus(Request $request, $id)
+    {
+        // TODO: $this->authorize('has-permission', '');
+
         $ids = [
             Task::STATUS_DENIED,
             Task::STATUS_DENIED_NEED_FIX,
@@ -63,11 +77,9 @@ class ReviewTaskController extends Controller
             $task = Task::find($id);
             $task->status = $status;
             $task->save();
-
-            // TODO: registar comentário da revisão.
-
         }
 
     }
+
 
 }
