@@ -40,12 +40,15 @@ class AuthServiceProvider extends ServiceProvider
 
     private function setGates()
     {
-        Gate::define('has-permission', function ($user, $action) {
+        Gate::define('has-permission', function ($user, $actionString) {
             $role = $user->role;
             if($role) {
                 $permissions = $role->permissions;
                 if(count($permissions) > 0) {
-                    return $permissions->pluck('code')->contains($action);
+
+                    $actions = explode('|', $actionString);
+                    $intersection = $permissions->pluck('code')->intersect($actions);
+                    return count($intersection) > 0;
                 }
             }
             return false;

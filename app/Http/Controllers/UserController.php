@@ -13,7 +13,8 @@ class UserController extends Controller
         $id = Auth::user()->id;
         $user = User::with(['role', 'role.permissions'])->find($id);
         if($user->role && $user->role->permissions) {
-            $user->permissions = $user->role->permissions->map(function($permission) {
+            $permissions = $user->role->permissions;
+            $user->permissions = $permissions->map(function($permission) {
                 return $permission->code;
             });
         }
