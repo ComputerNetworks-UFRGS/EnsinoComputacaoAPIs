@@ -47,6 +47,7 @@ $router->group([
             $router->delete('/tasks/{id}', 'UserTaskController@delete');
             $router->get('/tasks/{id}/publish', 'UserTaskController@publish');
 
+            $router->get('/tasks/{id}/attachment', 'TaskAttachmentController@list');
             $router->post('/tasks/{id}/attachment', 'TaskAttachmentController@create');
             $router->delete('/tasks/{id}/attachment/{attachment_id}', 'TaskAttachmentController@delete');
 

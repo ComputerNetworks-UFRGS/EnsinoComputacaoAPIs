@@ -17,7 +17,8 @@ class CreateTableTaskAttachments extends Migration
             $table->increments('id');
             $table->unsignedInteger('task_id');
             $table->text('title');
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->text('path');
             $table->timestamps();
 
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade')->onUpdate('cascade');
