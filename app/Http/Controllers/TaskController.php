@@ -56,6 +56,7 @@ class TaskController extends Controller
                         }
                     ]);
                 },
+                'attachments'
             ])
             ->where('status', Task::STATUS_PUBLISHED)
             ->find($id);
