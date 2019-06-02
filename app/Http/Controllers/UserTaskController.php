@@ -129,7 +129,8 @@ class UserTaskController extends Controller
                             $join->select(['id', 'name']);
                         }
                     ]);
-                }
+                },
+                'attachments'
             ])
             ->where('user_id', Auth::user()->id)
             ->find($id);
