@@ -4,16 +4,17 @@ $router->get('/', function () use ($router) {
     return 'ok';
 });
 
-$router->group(['prefix' => 'auth'], function($router) {
-    $router->post('login', 'AuthController@login');
-    $router->post('register', 'AuthController@register');
-});
 
 $router->group([
     'prefix' => 'api/v1',
 ], function($router) {
 
     // Public
+
+    $router->group(['prefix' => 'auth'], function($router) {
+        $router->post('login', 'AuthController@login');
+        $router->post('register', 'AuthController@register');
+    });
 
     $router->group(['prefix' => 'tasks'], function($router) {
         $router->get('/', 'TaskController@list');

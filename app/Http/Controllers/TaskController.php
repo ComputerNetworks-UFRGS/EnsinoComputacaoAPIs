@@ -55,7 +55,7 @@ class TaskController extends Controller
                             $join->select(['id', 'name']);
                         }
                     ]);
-                }
+                },
             ])
             ->where('status', Task::STATUS_PUBLISHED)
             ->find($id);
