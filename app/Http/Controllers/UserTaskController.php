@@ -74,10 +74,11 @@ class UserTaskController extends Controller
         if($task->status == Task::STATUS_DENIED_NEED_FIX) {
             $task->status = Task::STATUS_REVIEWED;
         } else if($task->status == Task::STATUS_PUBLISHED) {
-            // TODO: verificar user tem direito de publciar sem revisão...
 
-            $task->status = Task::STATUS_FOR_REVIEW;
-            // TODO: notificar curadores...
+            if (!Gate::allows('has-permission', 'task.no_review')) {
+                $task->status = Task::STATUS_FOR_REVIEW;
+                // TODO: notificar curadores...
+            }
         }
 
         if($request->skills) {
