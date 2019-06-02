@@ -81,6 +81,25 @@ class SetPermissions extends Command
     {
         return [
             [
+                'title' => 'Atividades',
+                'permissions' => [
+                    ['task.list', 'Ver'],
+                    ['task.detail', 'Ver detalhes'],
+                    ['task.create', 'Criar'],
+                    ['task.edit', 'Editar'],
+                    ['task.delete', 'Excluir'],
+                    ['task.no_review', 'Publicar sem revisão']
+                ]
+            ],
+            [
+                'title' => 'Revisão de publicação',
+                'permissions' => [
+                    ['review.list', 'Ver'],
+                    ['review.detail', 'Ver detalhes'],
+                    ['review.evaluate', 'Avaliar'],
+                ]
+            ],
+            [
                 'title' => 'Permissões',
                 'permissions' => [
                     ['role.list', 'Ver'],
@@ -95,24 +114,6 @@ class SetPermissions extends Command
                 'permissions' => [
                     ['users.list', 'Ver'],
                     ['users.edit', 'Editar'],
-                ]
-            ],
-            [
-                'title' => 'Atividades',
-                'permissions' => [
-                    ['task.list', 'Ver'],
-                    ['task.detail', 'Ver detalhes'],
-                    ['task.create', 'Criar'],
-                    ['task.edit', 'Editar'],
-                    ['task.delete', 'Excluir'],
-                ]
-            ],
-            [
-                'title' => 'Revisão de publicação',
-                'permissions' => [
-                    ['review.list', 'Ver'],
-                    ['review.detail', 'Ver detalhes'],
-                    ['review.evaluate', 'Avaliar'],
                 ]
             ],
         ];
@@ -135,6 +136,7 @@ class SetPermissions extends Command
                     'task.create',
                     'task.edit',
                     'task.delete',
+                    'task.no_review',
                     'role.list',
                     'role.detail',
                     'review.list',
@@ -151,6 +153,7 @@ class SetPermissions extends Command
                     'task.create',
                     'task.edit',
                     'task.delete',
+                    'task.no_review',
                     'review.list',
                     'review.detail',
                     'review.evaluate',

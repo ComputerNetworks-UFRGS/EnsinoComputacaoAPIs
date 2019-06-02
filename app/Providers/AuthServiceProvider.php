@@ -45,7 +45,6 @@ class AuthServiceProvider extends ServiceProvider
             if($role) {
                 $permissions = $role->permissions;
                 if(count($permissions) > 0) {
-
                     $actions = explode('|', $actionString);
                     $intersection = $permissions->pluck('code')->intersect($actions);
                     return count($intersection) > 0;
@@ -54,8 +53,7 @@ class AuthServiceProvider extends ServiceProvider
             return false;
         });
 
-        //
-        // TODO: controle de acesso a recursos específicos...
+        // controle de acesso a recursos específicos...
         //
         // Gate::define('owns-resource', function ($user, $resource) {
         //     $users = $resource->users;
@@ -67,4 +65,5 @@ class AuthServiceProvider extends ServiceProvider
         //     return false;
         // });
     }
+
 }

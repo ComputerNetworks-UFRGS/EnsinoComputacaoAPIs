@@ -10,6 +10,7 @@ use App\Models\Skill;
 use App\Http\Requests\StoreTask;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class UserTaskController extends Controller
 {
@@ -140,12 +141,15 @@ class UserTaskController extends Controller
         $this->authorize('has-permission', 'task.edit');
         $task = $this->findUserTask($id);
 
-        // TODO: verificar user tem direito de publciar sem revisão...
-
-        if($task->status == Task::STATUS_CREATED || $task->status == Task::STATUS_REVIEWED) {
-            $task->status = Task::STATUS_FOR_REVIEW;
-            // TODO: notificar curadores...
+        if (Gate::allows('has-permission', 'task.no_review')) {
+            $task->status = Task::STATUS_PUBLISHED;
             $task->save();
+        } else {
+            if($task->status == Task::STATUS_CREATED || $task->status == Task::STATUS_REVIEWED) {
+                $task->status = Task::STATUS_FOR_REVIEW;
+                // TODO: notificar curadores...
+                $task->save();
+            }
         }
 
 
