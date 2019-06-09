@@ -36,6 +36,7 @@ $router->group([
     $router->group(['prefix' => 'topics'], function($router) {
 
         $router->get('/', 'TopicController@list');
+        $router->post('/', 'TopicController@create');
 
     });
 

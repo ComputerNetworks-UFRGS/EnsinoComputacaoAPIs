@@ -13,35 +13,70 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Mews\Purifier\Facades\Purifier;
 use App\Models\LearningStage;
+use App\Models\Topic;
+use App\Models\TopicType;
 
 class TopicController extends Controller
 {
 
     public function list()
     {
-        $nodes = DB::table('topics AS eixo')
-            ->join('topic_types AS tt', function($join) {
-                $join->on('tt.id', '=', 'eixo.type_id')
-                    ->where('tt.is_head', 1);
-            })
-            ->join('learning_stages AS ls', function($join) {
-                $join->on('ls.id', '=', 'tt.learning_stage_id')
-                    ->where('ls.code', LearningStage::CODE_ENSINO_COMPUTACIONAL);
-            })
-            ->join('topics AS objeto', 'objeto.parent_id', '=', 'eixo.id')
-            ->join('skills AS s', 's.topic_id', '=', 'objeto.id')
-            ->select(
-                'eixo.id AS eixo_id',
-                'eixo.name as eixo_nome',
-                'objeto.id as objeto_id',
-                'objeto.name as objeto_nome',
-                's.id AS id',
-                's.name AS title',
-                's.code AS code')
-            ->get();
+        // find learging stage
+        $learningStage = LearningStage::where('code', LearningStage::CODE_ENSINO_COMPUTACIONAL)->first();
+        $types = TopicType::where('learning_stage_id', $learningStage->id)->get();
+        if(count($types) <= 0) {
+            return [];
+        }
+
+        // find head and list tree levels
+        $tree_struct = [];
+        $tree_types = [];
+        $head_type = false;
+        foreach($types as $type) {
+            if($type->is_head) {
+                $head_type = $type->id;
+            }
+            $tree_struct[] = "topic_type_{$type->id}";
+            $tree_types[] = $type->id;
+        }
+
+        // split head and trunk
+        $root = $tree_struct[count($tree_struct) - 1];
+        $trunk = array_slice($tree_struct, 0, count($tree_struct) - 1);
+
+        // root
+        $query = DB::table('topics AS ' . $root)
+            ->where($root . '.type_id', $head_type);
+
+        $select = [
+            "{$root}.id AS {$root}_id",
+            "{$root}.name as {$root}_nome",
+            's.id AS id',
+            's.name AS title',
+            's.code AS code',
+        ];
+
+        // trunk
+        $lastBranch = false;
+        foreach($trunk as $branch) {
+            $parent = $lastBranch ? $lastBranch : $root;
+
+            $query->leftJoin("topics AS {$branch}", "{$branch}.parent_id", '=', "{$parent}.id");
+            $select[] = "{$branch}.id as {$branch}_id";
+            $select[] = "{$branch}.name as {$branch}_nome";
+
+            $lastBranch = $branch;
+        }
+
+        // leafs
+        $parent = $lastBranch ? $lastBranch : $root;
+        $query->leftJoin('skills AS s', 's.topic_id', '=', "{$parent}.id");
+
+        $query->select($select);
 
 
-        $tree_struct = ['objeto', 'eixo']; // leaf to head order
+        $nodes = $query->get();
+
 
         $to_remove = [];
         foreach($tree_struct as $tree_node) {
@@ -49,18 +84,23 @@ class TopicController extends Controller
             $to_remove[] = $tree_node . '_nome';
         }
 
-        $groupFn = function($nodes, $depth) use(&$groupFn, $tree_struct, $to_remove) {
+        $groupFn = function($nodes, $depth) use(&$groupFn, $tree_struct, $tree_types, $to_remove) {
 
             if($depth > 0) {
 
                 $id = $tree_struct[$depth - 1] . '_id';
                 $title = $tree_struct[$depth - 1] . '_nome';
 
+                $type = $tree_types[count($tree_types) - $depth];
+                $children_type = isset($tree_types[count($tree_types) - $depth + 1]) ? $tree_types[count($tree_types) - $depth + 1] : false;
+
                 return $nodes->groupBy($id)
-                    ->map(function($items, $key) use(&$groupFn, $id, $title, $depth) {
+                    ->map(function($items, $key) use(&$groupFn, $id, $title, $type, $depth, $children_type) {
                         return [
                             'id' => $items[0]->{$id},
                             'title' => $items[0]->{$title},
+                            'type' => $type,
+                            'children_type' => $children_type,
                             'is_leaf' => $depth == 1,
                             'items' => $groupFn($items, $depth - 1),
                         ];
@@ -79,10 +119,24 @@ class TopicController extends Controller
         };
 
         return [
-            'title' => 'Ensino Computacional',
+            'title' => $learningStage->name,
             'items' => $groupFn($nodes, count($tree_struct)),
         ];
 
+    }
+
+    public function create(Request $request)
+    {
+        // $this->authorize('has-permission', ''); TODO
+        $topic = new Topic();
+        $topic->name = $request->name;
+        // $topic->code = $request->code;
+        // $topic->description = $request->description;
+        $topic->type_id = $request->type_id;
+        if($request->parent_id) {
+            $topic->parent_id = $request->parent_id;
+        }
+        $topic->save();
     }
 
 }
