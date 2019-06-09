@@ -61,6 +61,7 @@ $app->singleton(
 
 $app->configure('cors');
 $app->register(Barryvdh\Cors\ServiceProvider::class);
+$app->register(Mews\Purifier\PurifierServiceProvider::class);
 
 $app->middleware([
     \Barryvdh\Cors\HandleCors::class

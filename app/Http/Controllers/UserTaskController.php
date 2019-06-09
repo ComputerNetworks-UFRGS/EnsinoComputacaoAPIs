@@ -11,6 +11,7 @@ use App\Http\Requests\StoreTask;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Mews\Purifier\Facades\Purifier;
 
 class UserTaskController extends Controller
 {
@@ -36,7 +37,7 @@ class UserTaskController extends Controller
 
         $task = new Task();
         $task->title = $request->title;
-        $task->description = $request->description;
+        $task->description = Purifier::clean($request->description);
         $task->is_plugged = $request->is_plugged;
         $task->status = Task::STATUS_CREATED;
         $task->save();

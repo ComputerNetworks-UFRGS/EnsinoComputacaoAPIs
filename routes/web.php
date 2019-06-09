@@ -32,6 +32,13 @@ $router->group([
         $router->put('/{id}', 'GraphController@update');
     });
 
+    // TODO: private...
+    $router->group(['prefix' => 'topics'], function($router) {
+
+        $router->get('/', 'TopicController@list');
+
+    });
+
     // Private
 
     $router->group(['middleware' => 'auth'], function($router) {
@@ -46,7 +53,6 @@ $router->group([
             $router->put('/tasks/{id}', 'UserTaskController@update');
             $router->delete('/tasks/{id}', 'UserTaskController@delete');
             $router->get('/tasks/{id}/publish', 'UserTaskController@publish');
-
             $router->get('/tasks/{id}/attachment', 'TaskAttachmentController@list');
             $router->post('/tasks/{id}/attachment', 'TaskAttachmentController@create');
             $router->delete('/tasks/{id}/attachment/{attachment_id}', 'TaskAttachmentController@delete');
@@ -77,6 +83,11 @@ $router->group([
 
         });
 
+        // $router->group(['prefix' => 'topics'], function($router) {
+
+        //     $router->get('/', 'TopicController@list');
+
+        // });
 
     });
 
