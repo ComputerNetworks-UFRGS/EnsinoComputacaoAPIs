@@ -116,6 +116,14 @@ class SetPermissions extends Command
                     ['users.edit', 'Editar'],
                 ]
             ],
+            [
+                'title' => 'Objetos de ensino',
+                'permissions' => [
+                    ['topics.list', 'Ver'],
+                    ['topics.add', 'Adicionar'],
+                    ['topics.delete', 'Remover'],
+                ]
+            ],
         ];
     }
 
@@ -142,6 +150,9 @@ class SetPermissions extends Command
                     'review.list',
                     'review.detail',
                     'review.evaluate',
+                    'topics.list',
+                    'topics.add',
+                    'topics.delete',
                 ]
             ],
             [

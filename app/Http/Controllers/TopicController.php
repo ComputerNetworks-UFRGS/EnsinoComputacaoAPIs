@@ -21,6 +21,8 @@ class TopicController extends Controller
 
     public function list()
     {
+        $this->authorize('has-permission', 'topics.list');
+
         // find learging stage
         $learningStage = LearningStage::where('code', LearningStage::CODE_ENSINO_COMPUTACIONAL)->first();
         $types = TopicType::where('learning_stage_id', $learningStage->id)->get();
@@ -134,7 +136,8 @@ class TopicController extends Controller
 
     public function create(Request $request)
     {
-        // $this->authorize('has-permission', ''); TODO
+        $this->authorize('has-permission', 'topics.add');
+
         $topic = new Topic();
         $topic->name = $request->name;
         // $topic->code = $request->code;
@@ -148,10 +151,11 @@ class TopicController extends Controller
 
     public function delete($id)
     {
-        // $this->authorize('has-permission', ''); TODO
+        $this->authorize('has-permission', 'topics.delete');
+
+        Topic::where('parent_id', $id)->delete();
         $topic = Topic::find($id);
         $topic->delete();
-        Topic::where('parent_id', $id)->delete();
     }
 
 }

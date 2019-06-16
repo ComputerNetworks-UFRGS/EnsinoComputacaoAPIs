@@ -25,8 +25,7 @@ class CreateTableTopics extends Migration
             $table->timestamps();
 
             $table->foreign('type_id')->references('id')->on('topic_types');
-            $table->foreign('parent_id')->references('id')->on('topics');
-
+            $table->foreign('parent_id')->references('id')->on('topics')->onDelete('set null')->onUpdate('set null');
 
         });
     }
