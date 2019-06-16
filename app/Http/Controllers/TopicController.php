@@ -19,7 +19,15 @@ use App\Models\TopicType;
 class TopicController extends Controller
 {
 
-    public function list()
+
+    public function list(Request $req)
+    {
+        $this->authorize('has-permission', 'topics.list');
+
+        return Topic::orderBy('name')->get();
+    }
+
+    public function tree()
     {
         $this->authorize('has-permission', 'topics.list');
 

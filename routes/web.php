@@ -22,8 +22,18 @@ $router->group([
     });
 
     $router->group(['prefix' => 'skills'], function($router) {
+
         $router->get('/years', 'SkillController@years');
         $router->get('/tree', 'SkillController@tree');
+
+        $router->group(['middleware' => 'auth'], function($router) {
+            $router->get('/', 'SkillController@list');
+            $router->get('/{id}', 'SkillController@detail');
+            $router->post('/', 'SkillController@create');
+            $router->put('/{id}', 'SkillController@update');
+            $router->delete('/{id}', 'SkillController@delete');
+        });
+
     });
 
     $router->group(['prefix' => 'graphs'], function($router) {
@@ -32,14 +42,8 @@ $router->group([
         $router->put('/{id}', 'GraphController@update');
     });
 
-    // TODO: private...
-    $router->group(['prefix' => 'topics'], function($router) {
-
-        $router->get('/', 'TopicController@list');
-        $router->post('/', 'TopicController@create');
-        $router->delete('/{id}', 'TopicController@delete');
-
-    });
+    $router->get('/age-groups', 'AgeGroupController@list');
+    $router->get('/learning-stages', 'LearningStageController@list');
 
     // Private
 
@@ -77,19 +81,18 @@ $router->group([
         });
 
         $router->group(['prefix' => 'reviews'], function($router) {
-
             $router->get('/', 'ReviewTaskController@list');
             $router->get('/{id}', 'ReviewTaskController@detail');
             $router->post('/{id}/set-status', 'ReviewTaskController@setStatus');
             $router->post('/{id}/comment', 'ReviewTaskController@create');
-
         });
 
-        // $router->group(['prefix' => 'topics'], function($router) {
-
-        //     $router->get('/', 'TopicController@list');
-
-        // });
+        $router->group(['prefix' => 'topics'], function($router) {
+            $router->get('/', 'TopicController@list');
+            $router->get('/tree', 'TopicController@tree');
+            $router->post('/', 'TopicController@create');
+            $router->delete('/{id}', 'TopicController@delete');
+        });
 
     });
 

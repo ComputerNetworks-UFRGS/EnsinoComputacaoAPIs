@@ -2,12 +2,60 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\LearningStage;
+use App\Models\Skill;
 
 class SkillController extends Controller
 {
+
+    public function list()
+    {
+        // $this->authorize('has-permission', ''); TODO: ...
+        return Skill::orderBy('name')->get();
+    }
+
+    public function detail($id)
+    {
+        // $this->authorize('has-permission', 'task.detail');
+        return Skill::find($id);
+    }
+
+    public function create(Request $request)
+    {
+        // $this->authorize('has-permission', 'task.create');
+        $skill = new Skill();
+        $skill->code = $request->code;
+        $skill->name = $request->name;
+        $skill->sequential_number = $request->sequential_number;
+        $skill->learning_stage_id = $request->learning_stage_id;
+        $skill->age_group_id = $request->age_group_id;
+        $skill->topic_id = $request->topic_id;
+        $skill->save();
+        return 'ok';
+    }
+
+    public function update(Request $request, $id)
+    {
+        // $this->authorize('has-permission', 'task.edit');
+        $skill = Skill::find($id);
+        $skill->code = $request->code;
+        $skill->name = $request->name;
+        $skill->sequential_number = $request->sequential_number;
+        $skill->learning_stage_id = $request->learning_stage_id;
+        $skill->age_group_id = $request->age_group_id;
+        $skill->topic_id = $request->topic_id;
+        $skill->save();
+    }
+
+    public function delete($id)
+    {
+        // $this->authorize('has-permission', 'task.delete');
+        $skill = Skill::find($id);
+        $skill->tasks()->sync([]);
+        $skill->delete();
+    }
 
     public function years()
     {

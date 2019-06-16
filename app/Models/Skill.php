@@ -18,4 +18,9 @@ class Skill extends Model
         return $this->belongsTo(Topic::class);
     }
 
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_skills', 'skill_id', 'task_id');
+    }
+
 }
