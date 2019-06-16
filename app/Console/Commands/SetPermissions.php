@@ -55,6 +55,7 @@ class SetPermissions extends Command
             $newRole = new Role();
             $newRole->title = $role['title'];
             $newRole->description = $role['description'];
+            $newRole->default = isset($role['default']) && $role['default'];
             $newRole->save();
 
             $ids = [];
@@ -194,7 +195,8 @@ class SetPermissions extends Command
                     'task.create',
                     'task.edit',
                     'task.delete',
-                ]
+                ],
+                'default' => true,
             ],
         ];
     }
