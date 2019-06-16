@@ -51,9 +51,9 @@ class TopicController extends Controller
         $select = [
             "{$root}.id AS {$root}_id",
             "{$root}.name as {$root}_nome",
-            's.id AS id',
-            's.name AS title',
-            's.code AS code',
+            // 's.id AS id',
+            // 's.name AS title',
+            // 's.code AS code',
         ];
 
         // trunk
@@ -69,8 +69,8 @@ class TopicController extends Controller
         }
 
         // leafs
-        $parent = $lastBranch ? $lastBranch : $root;
-        $query->leftJoin('skills AS s', 's.topic_id', '=', "{$parent}.id");
+        // $parent = $lastBranch ? $lastBranch : $root;
+        // $query->leftJoin('skills AS s', 's.topic_id', '=', "{$parent}.id");
 
         $query->select($select);
 
@@ -96,13 +96,16 @@ class TopicController extends Controller
 
                 return $nodes->groupBy($id)
                     ->map(function($items, $key) use(&$groupFn, $id, $title, $type, $depth, $children_type) {
+
+                        $is_left = $depth == 1;
+
                         return [
                             'id' => $items[0]->{$id},
                             'title' => $items[0]->{$title},
                             'type' => $type,
                             'children_type' => $children_type,
-                            'is_leaf' => $depth == 1,
-                            'items' => $groupFn($items, $depth - 1),
+                            'is_leaf' => $is_left,
+                            'items' => $is_left ? false : $groupFn($items, $depth - 1),
                         ];
                     })
                     ->sortBy('title')
@@ -119,8 +122,12 @@ class TopicController extends Controller
         };
 
         return [
-            'title' => $learningStage->name,
-            'items' => $groupFn($nodes, count($tree_struct)),
+            'structure' => $tree_types,
+            // 'types' => $types,
+            'tree' => [
+                'title' => $learningStage->name,
+                'items' => $groupFn($nodes, count($tree_struct)),
+            ],
         ];
 
     }
@@ -137,6 +144,14 @@ class TopicController extends Controller
             $topic->parent_id = $request->parent_id;
         }
         $topic->save();
+    }
+
+    public function delete($id)
+    {
+        // $this->authorize('has-permission', ''); TODO
+        $topic = Topic::find($id);
+        $topic->delete();
+        Topic::where('parent_id', $id)->delete();
     }
 
 }

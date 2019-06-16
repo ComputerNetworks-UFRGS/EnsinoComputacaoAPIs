@@ -37,6 +37,7 @@ $router->group([
 
         $router->get('/', 'TopicController@list');
         $router->post('/', 'TopicController@create');
+        $router->delete('/{id}', 'TopicController@delete');
 
     });
 
