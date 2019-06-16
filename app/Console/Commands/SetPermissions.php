@@ -124,6 +124,16 @@ class SetPermissions extends Command
                     ['topics.delete', 'Remover'],
                 ]
             ],
+            [
+                'title' => 'Habilidades',
+                'permissions' => [
+                    ['skill.list', 'Ver'],
+                    ['skill.detail', 'Ver detalhes'],
+                    ['skill.create', 'Criar'],
+                    ['skill.edit', 'Editar'],
+                    ['skill.delete', 'Excluir'],
+                ]
+            ],
         ];
     }
 
@@ -153,6 +163,11 @@ class SetPermissions extends Command
                     'topics.list',
                     'topics.add',
                     'topics.delete',
+                    'skill.list',
+                    'skill.detail',
+                    'skill.create',
+                    'skill.edit',
+                    'skill.delete',
                 ]
             ],
             [

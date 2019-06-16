@@ -12,19 +12,19 @@ class SkillController extends Controller
 
     public function list()
     {
-        // $this->authorize('has-permission', ''); TODO: ...
+        $this->authorize('has-permission', 'skill.list');
         return Skill::orderBy('name')->get();
     }
 
     public function detail($id)
     {
-        // $this->authorize('has-permission', 'task.detail');
+        $this->authorize('has-permission', 'skill.detail');
         return Skill::find($id);
     }
 
     public function create(Request $request)
     {
-        // $this->authorize('has-permission', 'task.create');
+        $this->authorize('has-permission', 'skill.create');
         $skill = new Skill();
         $skill->code = $request->code;
         $skill->name = $request->name;
@@ -38,7 +38,7 @@ class SkillController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $this->authorize('has-permission', 'task.edit');
+        $this->authorize('has-permission', 'skill.edit');
         $skill = Skill::find($id);
         $skill->code = $request->code;
         $skill->name = $request->name;
@@ -51,7 +51,7 @@ class SkillController extends Controller
 
     public function delete($id)
     {
-        // $this->authorize('has-permission', 'task.delete');
+        $this->authorize('has-permission', 'skill.delete');
         $skill = Skill::find($id);
         $skill->tasks()->sync([]);
         $skill->delete();
