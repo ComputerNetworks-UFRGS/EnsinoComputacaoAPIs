@@ -45,6 +45,16 @@ $router->group([
     $router->get('/age-groups', 'AgeGroupController@list');
     $router->get('/learning-stages', 'LearningStageController@list');
 
+
+    // TODO: mover para auth...
+    $router->group(['prefix' => 'temp-graphs'], function($router) {
+        $router->get('/', 'GraphsController@list');
+        $router->get('/{id}', 'GraphsController@detail');
+        $router->post('/', 'GraphsController@create');
+        $router->post('/{id}/node', 'GraphsController@createNode');
+        $router->delete('/{id}/node/{node_id}', 'GraphsController@deleteNode');
+    });
+
     // Private
 
     $router->group(['middleware' => 'auth'], function($router) {
@@ -93,6 +103,9 @@ $router->group([
             $router->post('/', 'TopicController@create');
             $router->delete('/{id}', 'TopicController@delete');
         });
+
+
+
 
     });
 
