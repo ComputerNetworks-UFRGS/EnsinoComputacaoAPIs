@@ -51,8 +51,11 @@ $router->group([
         $router->get('/', 'GraphsController@list');
         $router->get('/{id}', 'GraphsController@detail');
         $router->post('/', 'GraphsController@create');
+        $router->delete('/{id}', 'GraphsController@delete');
         $router->post('/{id}/node', 'GraphsController@createNode');
         $router->delete('/{id}/node/{node_id}', 'GraphsController@deleteNode');
+        $router->post('/{id}/edge', 'GraphsController@addEdge');
+        $router->delete('/{id}/edge/{from_id}/{to_id}', 'GraphsController@deleteEdge');
     });
 
     // Private
@@ -103,9 +106,6 @@ $router->group([
             $router->post('/', 'TopicController@create');
             $router->delete('/{id}', 'TopicController@delete');
         });
-
-
-
 
     });
 
