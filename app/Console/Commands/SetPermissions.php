@@ -135,6 +135,16 @@ class SetPermissions extends Command
                     ['skill.delete', 'Excluir'],
                 ]
             ],
+            [
+                'title' => 'Currículos',
+                'permissions' => [
+                    ['curri.list', 'Ver'],
+                    ['curri.detail', 'Ver detalhes'],
+                    ['curri.create', 'Criar'],
+                    ['curri.edit', 'Editar'],
+                    ['curri.delete', 'Excluir'],
+                ]
+            ],
         ];
     }
 
@@ -169,6 +179,11 @@ class SetPermissions extends Command
                     'skill.create',
                     'skill.edit',
                     'skill.delete',
+                    'curri.list',
+                    'curri.detail',
+                    'curri.create',
+                    'curri.edit',
+                    'curri.delete',
                 ]
             ],
             [

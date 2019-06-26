@@ -11,24 +11,29 @@ use App\Models\Topic;
 class GraphsController extends Controller
 {
 
+
     public function list()
     {
+        $this->authorize('has-permission', 'curri.list');
         return Graph::get();
     }
 
     public function detail($id)
     {
+        $this->authorize('has-permission', 'curri.detail');
         $graph = Graph::with([
             'nodes',
             'nodes.dependencies',
             // 'nodes.dependents',
-        ])->find($id);
+            ])->find($id);
 
         return $graph;
     }
 
     public function create(Request $request)
     {
+        $this->authorize('has-permission', 'curri.create');
+
         $graph = new Graph();
         $graph->title = $request->title;
         $graph->description = $request->description;
@@ -38,6 +43,8 @@ class GraphsController extends Controller
 
     public function delete($id)
     {
+        $this->authorize('has-permission', 'curri.delete');
+
         $graph = Graph::find($id);
         GraphEdge::where('graph_id', $graph->id)->delete();
         GraphNode::where('graph_id', $graph->id)->delete();
@@ -46,6 +53,8 @@ class GraphsController extends Controller
 
     public function createNode(Request $request, $id)
     {
+        $this->authorize('has-permission', 'curri.edit');
+
         $topic = Topic::find($request->topic_id);
         $node = new GraphNode();
         $node->graph_id = $id;
@@ -56,6 +65,8 @@ class GraphsController extends Controller
 
     public function deleteNode($id, $node_id)
     {
+        $this->authorize('has-permission', 'curri.edit');
+
         $node = GraphNode::where('graph_id', $id)->find($node_id);
 
         GraphEdge::where('graph_id', $id)
@@ -71,6 +82,8 @@ class GraphsController extends Controller
 
     public function addEdge(Request $request, $id)
     {
+        $this->authorize('has-permission', 'curri.edit');
+
         $edge = new GraphEdge();
         $edge->graph_id = $id;
         $edge->node_from_id = $request->from_id;
@@ -81,6 +94,8 @@ class GraphsController extends Controller
 
     public function deleteEdge($id, $from_id, $to_id)
     {
+        $this->authorize('has-permission', 'curri.edit');
+
         GraphEdge::where('graph_id', $id)
             ->where('node_from_id', $from_id)
             ->where('node_to_id', $to_id)
