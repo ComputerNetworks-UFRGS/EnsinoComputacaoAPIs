@@ -59,35 +59,29 @@ class SkillController extends Controller
 
     public function years()
     {
-        // TODO: retornar objetos por ano
-        return [];
+        $skills = DB::table('skills AS s')
+            ->join('learning_objects AS objeto', 'objeto.id', '=', 's.learning_object_id')
+            ->join('learning_axis AS eixo', 'eixo.id', '=', 'objeto.learning_axis_id')
+            ->join('learning_stages AS ls', 'ls.id', '=', 'eixo.learning_stages_id')
+            ->join('age_groups AS ag', 'ag.id', '=', 's.age_group_id')
+            ->select('ag.name AS idade_nome',
+                'ag.code AS idade_codigo',
+                'ag.age_from AS idade_min',
+                'ag.age_to AS idade_max',
+                'objeto.name AS objeto_nome',
+                's.id AS habilidade_id',
+                's.code AS habilidade_codigo',
+                's.name AS habilidade_nome',
+                's.sequential_number AS habilidade_numero',
+                'eixo.name AS eixo_nome',
+                'eixo.description AS eixo_code')
+            ->orderByRaw('ag.age_from, s.sequential_number')
+            ->get();
 
-        // $skills = DB::table('skills AS s')
-        //     ->join('learning_stages AS ls', function($join) {
-        //        $join->on('ls.id', '=', 's.learning_stage_id')
-        //             ->where('ls.code', LearningStage::CODE_ENSINO_COMPUTACIONAL);
-        //     })
-        //     ->join('age_groups AS ag', 'ag.id', '=', 's.age_group_id')
-        //     ->join('topics AS objeto', 'objeto.id', '=', 's.topic_id')
-        //     ->join('topics AS eixo', 'eixo.id', '=', 'objeto.parent_id')
-        //     ->select('ag.name AS idade_nome',
-        //         'ag.code AS idade_codigo',
-        //         'ag.age_from AS idade_min',
-        //         'ag.age_to AS idade_max',
-        //         'objeto.name AS objeto_nome',
-        //         's.id AS habilidade_id',
-        //         's.code AS habilidade_codigo',
-        //         's.name AS habilidade_nome',
-        //         's.sequential_number AS habilidade_numero',
-        //         'eixo.name AS eixo_nome',
-        //         'eixo.code AS eixo_code')
-        //     ->orderByRaw('ag.age_from, s.sequential_number')
-        //     ->get();
-
-        // return $skills->groupBy('idade_codigo')
-        //     ->map(function($item, $key) {
-        //         return $item->groupBy('objeto_nome');
-        //     });
+        return $skills->groupBy('idade_codigo')
+            ->map(function($item, $key) {
+                return $item->groupBy('objeto_nome');
+            });
     }
 
     public function tree()
