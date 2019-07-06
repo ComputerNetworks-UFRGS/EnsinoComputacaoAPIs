@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Graph;
 use App\Models\GraphEdge;
-use App\Models\Topic;
 
 class GraphController extends Controller
 {
@@ -51,7 +50,6 @@ class GraphController extends Controller
                 'content' => [
                     'text' => $node->title,
                     'type' => $node->type,
-                    'topic_id' => $node->topic_id,
                 ],
                 'width' => $node->width,
                 'height' => $node->height,

@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class LearningStage extends Model
 {
     const CODE_ENSINO_COMPUTACIONAL = 'EC';
-    const CODE_ENSINO_INICIAL = 'EI';
+
+    public function axis()
+    {
+        return $this->hasMany(LearningAxi::class, 'learning_stages_id');
+    }
+
 }
