@@ -6,4 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class LearningObject extends Model
 {
+
+    public function skills()
+    {
+        return $this->hasMany(Skill::class);
+    }
+
 }

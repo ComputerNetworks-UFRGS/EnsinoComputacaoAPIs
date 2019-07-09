@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LearningAxi extends Model
+class LearningAxis extends Model
 {
+    protected $table = 'learning_axis';
 
     public function objects()
     {

@@ -29,9 +29,8 @@ class SkillController extends Controller
         $skill->code = $request->code;
         $skill->name = $request->name;
         $skill->sequential_number = $request->sequential_number;
-        $skill->learning_stage_id = $request->learning_stage_id;
+        $skill->learning_object_id = $request->learning_object_id;
         $skill->age_group_id = $request->age_group_id;
-        // $skill->topic_id = $request->topic_id;
         $skill->save();
         return 'ok';
     }
@@ -43,7 +42,7 @@ class SkillController extends Controller
         $skill->code = $request->code;
         $skill->name = $request->name;
         $skill->sequential_number = $request->sequential_number;
-        $skill->learning_stage_id = $request->learning_stage_id;
+        $skill->learning_object_id = $request->learning_object_id;
         $skill->age_group_id = $request->age_group_id;
         // $skill->topic_id = $request->topic_id;
         $skill->save();
@@ -87,7 +86,7 @@ class SkillController extends Controller
     public function tree()
     {
         return LearningStage::where('code', LearningStage::CODE_ENSINO_COMPUTACIONAL)
-            ->with('axis', 'axis.objects')
+            ->with('axis', 'axis.objects', 'axis.objects.skills')
             ->first();
     }
 

@@ -121,7 +121,9 @@ class SetPermissions extends Command
                 'title' => 'Objetos de ensino',
                 'permissions' => [
                     ['topics.list', 'Ver'],
+                    ['topics.detail', 'Detalhes'],
                     ['topics.add', 'Adicionar'],
+                    ['topics.edit', 'Editar'],
                     ['topics.delete', 'Remover'],
                 ]
             ],
@@ -172,7 +174,9 @@ class SetPermissions extends Command
                     'review.detail',
                     'review.evaluate',
                     'topics.list',
+                    'topics.detail',
                     'topics.add',
+                    'topics.edit',
                     'topics.delete',
                     'skill.list',
                     'skill.detail',

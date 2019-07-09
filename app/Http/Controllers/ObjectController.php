@@ -15,7 +15,7 @@ use Mews\Purifier\Facades\Purifier;
 use App\Models\LearningStage;
 use App\Models\LearningObject;
 
-class TopicController extends Controller
+class ObjectController extends Controller
 {
 
 
@@ -23,6 +23,12 @@ class TopicController extends Controller
     {
         $this->authorize('has-permission', 'topics.list');
         return LearningObject::orderBy('name')->get();
+    }
+
+    public function detail($id)
+    {
+        $this->authorize('has-permission', 'topics.detail');
+        return LearningObject::find($id);
     }
 
     public function tree()
@@ -149,6 +155,17 @@ class TopicController extends Controller
         $this->authorize('has-permission', 'topics.add');
 
         $object = new LearningObject();
+        $object->name = $request->name;
+        $object->description = $request->description;
+        $object->learning_axis_id = $request->learning_axis_id;
+        $object->save();
+    }
+
+    public function update($id, Request $request)
+    {
+        $this->authorize('has-permission', 'topics.edit');
+
+        $object = LearningObject::find($id);
         $object->name = $request->name;
         $object->description = $request->description;
         $object->learning_axis_id = $request->learning_axis_id;

@@ -10,7 +10,7 @@ class LearningStage extends Model
 
     public function axis()
     {
-        return $this->hasMany(LearningAxi::class, 'learning_stages_id');
+        return $this->hasMany(LearningAxis::class, 'learning_stages_id');
     }
 
 }
