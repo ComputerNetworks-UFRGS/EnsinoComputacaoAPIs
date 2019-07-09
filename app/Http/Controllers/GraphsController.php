@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Graph;
 use App\Models\GraphNode;
 use App\Models\GraphEdge;
-// use App\Models\Topic;
+use App\Models\LearningObject;
 
 class GraphsController extends Controller
 {
@@ -55,12 +55,11 @@ class GraphsController extends Controller
     {
         $this->authorize('has-permission', 'curri.edit');
 
-        // TODO: linkar objeto de ensino
-        // $topic = Topic::find($request->topic_id);
+        $object = LearningObject::find($request->object_id);
         $node = new GraphNode();
         $node->graph_id = $id;
-        // $node->topic_id = $topic->id;
-        $node->title = $topic->name;
+        $node->learning_object_id = $object->id;
+        $node->title = $object->name;
         $node->save();
     }
 
