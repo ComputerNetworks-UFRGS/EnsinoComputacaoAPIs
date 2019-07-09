@@ -28,13 +28,11 @@ class TaskController extends Controller
             $query->where('is_plugged', (int) $req->plugged);
 
         })->when($req->objects, function($query) use($req) {
-
             $query->whereHas('skills', function($query) use($req) {
-                $query->whereHas('topic', function($query) use($req) {
+                $query->whereHas('object', function($query) use($req) {
                     $query->whereIn('id', $req->objects);
                 });
             });
-
         })
         ->where('status', Task::STATUS_PUBLISHED)
         ->get();

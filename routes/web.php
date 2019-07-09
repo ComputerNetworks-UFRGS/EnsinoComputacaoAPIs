@@ -44,7 +44,7 @@ $router->group([
 
     $router->get('/age-groups', 'AgeGroupController@list');
     $router->get('/learning-stages', 'LearningStageController@list');
-
+    $router->get('/axis', 'AxisController@list');
 
     // TODO: mover para auth...
     $router->group(['prefix' => 'temp-graphs'], function($router) {
@@ -100,11 +100,13 @@ $router->group([
             $router->post('/{id}/comment', 'ReviewTaskController@create');
         });
 
-        $router->group(['prefix' => 'topics'], function($router) {
-            $router->get('/', 'TopicController@list');
-            $router->get('/tree', 'TopicController@tree');
-            $router->post('/', 'TopicController@create');
-            $router->delete('/{id}', 'TopicController@delete');
+        $router->group(['prefix' => 'object'], function($router) {
+            $router->get('/', 'ObjectController@list');
+            $router->get('/tree', 'ObjectController@tree');
+            $router->get('/{id}', 'ObjectController@detail');
+            $router->post('/', 'ObjectController@create');
+            $router->put('/{id}', 'ObjectController@update');
+            $router->delete('/{id}', 'ObjectController@delete');
         });
 
     });
