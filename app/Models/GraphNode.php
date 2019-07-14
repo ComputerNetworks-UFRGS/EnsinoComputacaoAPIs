@@ -17,4 +17,9 @@ class GraphNode extends Model
         return $this->belongsToMany(GraphNode::class, GraphEdge::class, 'node_from_id', 'node_to_id');
     }
 
+    public function learnigObject()
+    {
+        return $this->belongsTo(LearningObject::class, 'learning_object_id');
+    }
+
 }

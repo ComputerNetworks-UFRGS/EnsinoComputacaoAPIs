@@ -7,6 +7,7 @@ use App\Models\Graph;
 use App\Models\GraphNode;
 use App\Models\GraphEdge;
 use App\Models\LearningObject;
+use App\Http\Resources\GraphGoJsResource;
 
 class GraphController extends Controller
 {
@@ -16,13 +17,23 @@ class GraphController extends Controller
         return Graph::get();
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
+        // TODO: reduzir dados retornados
         $graph = Graph::with([
             'nodes',
             'nodes.dependencies',
+            'nodes.learnigObject',
+            'nodes.learnigObject.skills',
             // 'nodes.dependents',
             ])->find($id);
+
+
+        if($request->view) {
+            if($request->view == 'gojs') {
+                return new GraphGoJsResource($graph);
+            }
+        }
 
         return $graph;
     }
