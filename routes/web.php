@@ -10,7 +10,6 @@ $router->group([
 ], function($router) {
 
     // Public
-
     $router->group(['prefix' => 'auth'], function($router) {
         $router->post('login', 'AuthController@login');
         $router->post('register', 'AuthController@register');
@@ -39,27 +38,13 @@ $router->group([
     $router->group(['prefix' => 'graphs'], function($router) {
         $router->get('/', 'GraphController@list');
         $router->get('/{id}', 'GraphController@detail');
-        $router->put('/{id}', 'GraphController@update');
     });
 
     $router->get('/age-groups', 'AgeGroupController@list');
     $router->get('/learning-stages', 'LearningStageController@list');
     $router->get('/axis', 'AxisController@list');
 
-    // TODO: mover para auth...
-    $router->group(['prefix' => 'temp-graphs'], function($router) {
-        $router->get('/', 'GraphsController@list');
-        $router->get('/{id}', 'GraphsController@detail');
-        $router->post('/', 'GraphsController@create');
-        $router->delete('/{id}', 'GraphsController@delete');
-        $router->post('/{id}/node', 'GraphsController@createNode');
-        $router->delete('/{id}/node/{node_id}', 'GraphsController@deleteNode');
-        $router->post('/{id}/edge', 'GraphsController@addEdge');
-        $router->delete('/{id}/edge/{from_id}/{to_id}', 'GraphsController@deleteEdge');
-    });
-
     // Private
-
     $router->group(['middleware' => 'auth'], function($router) {
 
         $router->group(['prefix' => 'user'], function($router) {
@@ -107,6 +92,15 @@ $router->group([
             $router->post('/', 'ObjectController@create');
             $router->put('/{id}', 'ObjectController@update');
             $router->delete('/{id}', 'ObjectController@delete');
+        });
+
+        $router->group(['prefix' => 'graphs'], function($router) {
+            $router->post('/', 'GraphController@create');
+            $router->delete('/{id}', 'GraphController@delete');
+            $router->post('/{id}/node', 'GraphController@createNode');
+            $router->delete('/{id}/node/{node_id}', 'GraphController@deleteNode');
+            $router->post('/{id}/edge', 'GraphController@addEdge');
+            $router->delete('/{id}/edge/{from_id}/{to_id}', 'GraphController@deleteEdge');
         });
 
     });

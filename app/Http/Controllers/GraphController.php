@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Graph;
+use App\Models\GraphNode;
 use App\Models\GraphEdge;
+use App\Models\LearningObject;
 
 class GraphController extends Controller
 {
@@ -17,72 +20,83 @@ class GraphController extends Controller
     {
         $graph = Graph::with([
             'nodes',
-            'edges'
-        ])->find($id);
+            'nodes.dependencies',
+            // 'nodes.dependents',
+            ])->find($id);
 
-        return $this->formatForDiagramVue($graph);
+        return $graph;
     }
 
-    public function update(Request $request, $id)
+    public function create(Request $request)
     {
-        $graphRequest = $request->graph;
+        $this->authorize('has-permission', 'curri.create');
 
-        $graph = Graph::with([
-            'nodes',
-            'edges'
-        ])->find($id);
-
-        $graph->width = @$graphRequest->width;
-        $graph->height = @$graphRequest->height;
-        $graph->background = @$graphRequest->background;
-
-        // $nodes = $request->nodes ?: [];
-        // $edges = $request->edges ?: [];
-
+        $graph = new Graph();
+        $graph->title = $request->title;
+        $graph->description = $request->description;
+        $graph->save();
+        return 'ok';
     }
 
-    private function formatForDiagramVue($graph)
+    public function delete($id)
     {
-        $nodes = [];
-        foreach($graph->nodes as $node) {
-            $nodes[] = [
-                'id' => $node->id,
-                'content' => [
-                    'text' => $node->title,
-                    'type' => $node->type,
-                ],
-                'width' => $node->width,
-                'height' => $node->height,
-                'shape' => $node->shape,
-                'point' => [
-                    'x' => (float) $node->position_x,
-                    'y' => (float) $node->position_y,
-                ],
-            ];
-        }
+        $this->authorize('has-permission', 'curri.delete');
 
-        $links = [];
-        foreach($graph->edges as $edge) {
-            $links[] = [
-                'id' => "{$edge->graph_id}-{$edge->node_from_id}-{$edge->node_to_id}" ,
-                'source' => $edge->node_from_id,
-                'destination' => $edge->node_to_id,
-                'point' => [
-                    'x' => (float) $node->position_x,
-                    'y' => (float) $node->position_y,
-                ],
-                'color' => $edge->color,
-            ];
-        }
+        $graph = Graph::find($id);
+        GraphEdge::where('graph_id', $graph->id)->delete();
+        GraphNode::where('graph_id', $graph->id)->delete();
+        $graph->delete();
+    }
 
-        return [
-            'width' => $graph->width,
-            'height' => $graph->height,
-            'background' => $graph->background,
-            'nodes' => $nodes,
-            'links' => $links,
-        ];
+    public function createNode(Request $request, $id)
+    {
+        $this->authorize('has-permission', 'curri.edit');
 
+        $object = LearningObject::find($request->object_id);
+        $node = new GraphNode();
+        $node->graph_id = $id;
+        $node->learning_object_id = $object->id;
+        $node->title = $object->name;
+        $node->save();
+    }
+
+    public function deleteNode($id, $node_id)
+    {
+        $this->authorize('has-permission', 'curri.edit');
+
+        $node = GraphNode::where('graph_id', $id)->find($node_id);
+
+        GraphEdge::where('graph_id', $id)
+            ->where('node_from_id', $node->id)
+            ->delete();
+
+        GraphEdge::where('graph_id', $id)
+            ->where('node_to_id', $node->id)
+            ->delete();
+
+        $node->delete();
+    }
+
+    public function addEdge(Request $request, $id)
+    {
+        $this->authorize('has-permission', 'curri.edit');
+
+        $edge = new GraphEdge();
+        $edge->graph_id = $id;
+        $edge->node_from_id = $request->from_id;
+        $edge->node_to_id = $request->to_id;
+        $edge->save();
+        return 'ok';
+    }
+
+    public function deleteEdge($id, $from_id, $to_id)
+    {
+        $this->authorize('has-permission', 'curri.edit');
+
+        GraphEdge::where('graph_id', $id)
+            ->where('node_from_id', $from_id)
+            ->where('node_to_id', $to_id)
+            ->delete();
     }
 
 }
