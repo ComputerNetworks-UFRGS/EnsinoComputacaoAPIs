@@ -40,15 +40,6 @@ class GraphGoJsResource extends JsonResource
             'edges' => $links,
         ];
 
-        // {
-        //     "id": "23",
-        //     "content": {
-        //         "text": "Segurança digital",
-        //         "color": "#94FACC"
-        //     },
-        //     "year": 3
-        //     }
-
     }
 
 }
