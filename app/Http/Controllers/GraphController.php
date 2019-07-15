@@ -28,7 +28,7 @@ class GraphController extends Controller
             'nodes.dependents',
             'nodes.learnigObject',
             'nodes.learnigObject.skills',
-            ])->find($id);
+        ])->find($id);
 
         if($request->view) {
             if($request->view == 'gojs') {
