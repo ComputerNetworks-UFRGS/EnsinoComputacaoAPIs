@@ -8,6 +8,7 @@ use App\Models\GraphNode;
 use App\Models\GraphEdge;
 use App\Models\LearningObject;
 use App\Http\Resources\GraphGoJsResource;
+use App\Http\Resources\GraphStepsResource;
 
 class GraphController extends Controller
 {
@@ -23,15 +24,16 @@ class GraphController extends Controller
         $graph = Graph::with([
             'nodes',
             'nodes.dependencies',
+            'nodes.dependents',
             'nodes.learnigObject',
             'nodes.learnigObject.skills',
-            // 'nodes.dependents',
             ])->find($id);
-
 
         if($request->view) {
             if($request->view == 'gojs') {
                 return new GraphGoJsResource($graph);
+            } else if($request->view == 'steps') {
+                return new GraphStepsResource($graph);
             }
         }
 
