@@ -13,37 +13,18 @@ class GraphYearsResource extends JsonResource
     public function toArray($request)
     {
         // TODO: tratar loops...
-        $this->groupSteps($this->nodes);
+        $this->steps = $nodes->groupBy(function ($item, $key) {
+            if($item->learnigObject && $item->learnigObject->ageGroup) {
+                return $item->learnigObject->ageGroup->id;
+            } else {
+                return '????';
+            }
+        });
         return $this->steps;
         // return $this->getFormattedSteps();
         // $this->removeDuplicates();
 
 
-    }
-
-    /**
-     * - agrupa por learning_stage
-     */
-    private function groupSteps($nodes)
-    {
-        $this->steps = $nodes->groupBy(function ($item, $key) {
-            if($item->learnigObject && $item->learnigObject->skills) {
-                $skill = $item->learnigObject->skills->first();
-                return $skill->ageGroup->id;
-            } else {
-                return '????';
-            }
-        });
-        // $dependents = [];
-        // foreach($nodes as $node) {
-        //     foreach($node->dependents as $dependent) {
-        //         $dependents[] = $dependent;
-        //     }
-        // }
-        // $this->steps[] = $nodes;
-        // if(count($dependents) > 0) {
-        //     $this->groupSteps($dependents);
-        // }
     }
 
     private function getFormattedSteps()

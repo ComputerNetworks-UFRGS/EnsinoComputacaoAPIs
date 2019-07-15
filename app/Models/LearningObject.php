@@ -12,4 +12,9 @@ class LearningObject extends Model
         return $this->hasMany(Skill::class);
     }
 
+    public function ageGroup()
+    {
+        return $this->belongsTo(AgeGroup::class);
+    }
+
 }
