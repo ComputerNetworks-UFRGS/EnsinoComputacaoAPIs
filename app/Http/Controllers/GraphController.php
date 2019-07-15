@@ -9,6 +9,7 @@ use App\Models\GraphEdge;
 use App\Models\LearningObject;
 use App\Http\Resources\GraphGoJsResource;
 use App\Http\Resources\GraphStepsResource;
+use App\Http\Resources\GraphYearsResource;
 
 class GraphController extends Controller
 {
@@ -34,6 +35,8 @@ class GraphController extends Controller
                 return new GraphGoJsResource($graph);
             } else if($request->view == 'steps') {
                 return new GraphStepsResource($graph);
+            } else if($request->view == 'years') {
+                return new GraphYearsResource($graph);
             }
         }
 
