@@ -79,14 +79,19 @@ class SkillController extends Controller
 
         return $skills->groupBy('idade_codigo')
             ->map(function($item, $key) {
-                return $item->groupBy('objeto_nome');
+                return [
+                    'idade' => $item->first(),
+                    'objects' => $item->groupBy('objeto_nome'),
+                ];
             });
     }
 
     public function tree()
     {
         return LearningStage::where('code', LearningStage::CODE_ENSINO_COMPUTACIONAL)
-            ->with('axis', 'axis.objects', 'axis.objects.skills')
+            ->with(['axis', 'axis.objects' => function($join) {
+                $join->orderBy('name');
+            }, 'axis.objects.skills'])
             ->first();
     }
 
