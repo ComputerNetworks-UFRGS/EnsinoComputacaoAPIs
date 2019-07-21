@@ -74,7 +74,7 @@ class SkillController extends Controller
                 's.sequential_number AS habilidade_numero',
                 'eixo.name AS eixo_nome',
                 'eixo.description AS eixo_code')
-            ->orderByRaw('ag.age_from, s.sequential_number')
+            ->orderByRaw('ag.age_from, objeto.name')
             ->get();
 
         return $skills->groupBy('idade_codigo')
