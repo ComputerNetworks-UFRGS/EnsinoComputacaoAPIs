@@ -10,6 +10,7 @@ use App\Models\LearningObject;
 use App\Http\Resources\GraphGoJsResource;
 use App\Http\Resources\GraphStepsResource;
 use App\Http\Resources\GraphYearsResource;
+use App\Http\Resources\GraphJsPlumbResource;
 
 class GraphController extends Controller
 {
@@ -30,13 +31,15 @@ class GraphController extends Controller
             'nodes.learnigObject.skills',
         ])->find($id);
 
-        if($request->view) {
-            if($request->view == 'gojs') {
+        if ($request->view) {
+            if ($request->view == 'gojs') {
                 return new GraphGoJsResource($graph);
-            } else if($request->view == 'steps') {
+            } else if ($request->view == 'steps') {
                 return new GraphStepsResource($graph);
-            } else if($request->view == 'years') {
+            } else if ($request->view == 'years') {
                 return new GraphYearsResource($graph);
+            } else if ($request->view == 'jsplumb') {
+                return new GraphJsPlumbResource($graph);
             }
         }
 
@@ -114,5 +117,4 @@ class GraphController extends Controller
             ->where('node_to_id', $to_id)
             ->delete();
     }
-
 }
