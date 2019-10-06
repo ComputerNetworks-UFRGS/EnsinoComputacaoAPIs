@@ -54,8 +54,24 @@ class GraphController extends Controller
         $graph = new Graph();
         $graph->title = $request->title;
         $graph->description = $request->description;
+        $graph->width = $request->width;
+        $graph->height = $request->height;
+        $graph->group_by_year = $request->group_by_year;
         $graph->save();
         return 'ok';
+    }
+
+    public function update(Request $request, $id)
+    {
+        // $this->authorize('has-permission', 'curri.edit');
+
+        $graph = Graph::find($id);
+        $graph->title = $request->title;
+        $graph->description = $request->description;
+        $graph->width = $request->width;
+        $graph->height = $request->height;
+        $graph->group_by_year = $request->group_by_year;
+        $graph->save();
     }
 
     public function delete($id)
@@ -118,4 +134,16 @@ class GraphController extends Controller
             ->where('node_to_id', $to_id)
             ->delete();
     }
+
+    public function updatePositions(Request $request, $id)
+    {
+        $positions = $request->positions;
+        foreach($positions as $pos) {
+            $node = GraphNode::where('graph_id', $id)->where('id', $pos['id'])->first();
+            $node->position_x = $pos['x'];
+            $node->position_y = $pos['y'];
+            $node->update();
+        }
+    }
+
 }

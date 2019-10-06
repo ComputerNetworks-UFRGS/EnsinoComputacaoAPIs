@@ -6,11 +6,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GraphJsPlumbResource extends JsonResource
 {
+    private $steps = [];
+    private $tracked = [];
 
     public function toArray($request)
     {
 
         $groupByYear = $request->groupByYear;
+        $groupByStep = $request->groupByStep; // hierarquia
 
         $nodes = [];
         foreach ($this->nodes as $node) {
@@ -45,15 +48,14 @@ class GraphJsPlumbResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'nodes' => $groupByYear ? [] : $nodes,
+            'nodes' => ($groupByYear || $groupByStep) ? [] : $nodes,
             'edges' => $links,
-            'groups' => $groupByYear ? $this->groupNodesByAgeGroup($nodes) : [],
+            'groups' => $groupByStep ? $this->groupNodesBySteps($nodes) : ($groupByYear ? $this->groupNodesByAgeGroup($nodes) : []),
         ];
     }
 
     private function groupNodesByAgeGroup($nodes)
     {
-
         $groups = [];
         foreach ($nodes as $node) {
             $ageGroupId = $node['age_group']->id;
@@ -79,4 +81,91 @@ class GraphJsPlumbResource extends JsonResource
 
         return $groups;
     }
+
+    private function groupNodesBySteps($nodes)
+    {
+        return [];
+        // $nodes = $this->nodes->filter(function ($node) {
+        //     return count($node['dependencies']) <= 0;
+        // });
+        // $this->groupSteps($nodes);
+        // $this->removeDuplicates();
+        // $steps = $this->getFormattedSteps();
+
+        // $groups = [];
+        // foreach ($steps as $k => $nodes) {
+        //     $groupId = $k;
+        //     $groups[$groupId] = [
+        //         'id' => 'group' . $groupId,
+        //         'title' => $groupId,
+        //         'height' => 100,
+        //         'width' => 400,
+        //         'x' => 0,
+        //         'y' => 0,
+        //         'nodes' => $nodes
+        //     ];
+        // }
+
+        // return $groups;
+    }
+
+    /**
+     * - primeiro nível é composto pelos nodos sem nenhuma dependência
+     * - para cada nodo da lista, percorre seus dependentes
+     * - registra cada um dos dependentes ainda não incluídos
+     * - incrementa contador de nível
+     * - repete processo com lista de dependentes recém montada
+     */
+    // private function groupSteps($nodes)
+    // {
+    //     $dependents = [];
+    //     foreach ($nodes as $node) {
+    //         foreach ($node['dependents'] as $dependent) {
+    //             $dependents[] = $dependent;
+    //         }
+    //     }
+    //     $this->steps[] = $nodes;
+    //     if (count($dependents) > 0) {
+    //         $this->groupSteps($dependents);
+    //     }
+    // }
+
+    // private function removeDuplicates()
+    // {
+    //     $count = count($this->steps);
+    //     for ($i = $count - 1; $i >= 0; $i--) {
+    //         foreach ($this->steps[$i] as $j => $node) {
+    //             if (isset($this->tracked[$node->id])) {
+    //                 unset($this->steps[$i][$j]);
+    //             }
+    //             $this->tracked[$node->id] = true;
+    //         }
+    //     }
+    // }
+
+    // private function getFormattedSteps()
+    // {
+    //     $steps = [];
+    //     foreach ($this->steps as $nodes) {
+    //         $step = [];
+    //         foreach ($nodes as $node) {
+
+    //             $dependencies = $node->dependencies->transform(function ($dependency) {
+    //                 return $dependency->id;
+    //             });
+    //             $dependents = $node->dependents->transform(function ($dependent) {
+    //                 return $dependent->id;
+    //             });
+    //             $step[] = [
+    //                 'id' => $node->id,
+    //                 'title' => $node->title,
+    //                 'dependencies' => $dependencies,
+    //                 'dependents' => $dependents,
+    //             ];
+    //         }
+    //         $steps[] = $step;
+    //     }
+
+    //     return $steps;
+    // }
 }

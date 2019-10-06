@@ -96,11 +96,13 @@ $router->group([
 
         $router->group(['prefix' => 'graphs'], function($router) {
             $router->post('/', 'GraphController@create');
+            $router->put('/{id}', 'GraphController@update');
             $router->delete('/{id}', 'GraphController@delete');
             $router->post('/{id}/node', 'GraphController@createNode');
             $router->delete('/{id}/node/{node_id}', 'GraphController@deleteNode');
             $router->post('/{id}/edge', 'GraphController@addEdge');
             $router->delete('/{id}/edge/{from_id}/{to_id}', 'GraphController@deleteEdge');
+            $router->put('/{id}/nodes', 'GraphController@updatePositions');
         });
 
     });
