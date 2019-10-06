@@ -6,8 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GraphJsPlumbResource extends JsonResource
 {
-    private $steps = [];
-    private $tracked = [];
+    // private $steps = [];
+    // private $tracked = [];
 
     public function toArray($request)
     {
@@ -64,8 +64,8 @@ class GraphJsPlumbResource extends JsonResource
                     'id' => 'group' . $ageGroupId,
                     'title' => $node['age_group']['name'],
                     'min_age' => $node['age_group']['age_from'],
-                    'height' => 100,
-                    'width' => 400,
+                    'height' => $this->height,
+                    'width' => $this->width,
                     'x' => 0,
                     'y' => 0,
                     'nodes' => []
