@@ -10,6 +10,8 @@ class GraphJsPlumbResource extends JsonResource
     public function toArray($request)
     {
 
+        $groupByYear = $request->groupByYear;
+
         $nodes = [];
         foreach ($this->nodes as $node) {
 
@@ -38,27 +40,43 @@ class GraphJsPlumbResource extends JsonResource
             ];
         }
 
-        $groups = collect($nodes)->groupBy(function($n) {
-            return $n['age_group']['id'];
-        })->toArray();
-
-        $ggg = [];
-        foreach($groups as $k => $nodes) {
-            $g = [];
-            $g['id'] = 'group' . $k;
-            $g['height'] = 200;
-            $g['x'] = 0;
-            $g['y'] = 0;
-            $g['nodes'] = $nodes;
-            $ggg[] = $g;
-        }
 
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'groups' => $ggg,
+            'nodes' => $groupByYear ? [] : $nodes,
             'edges' => $links,
+            'groups' => $groupByYear ? $this->groupNodesByAgeGroup($nodes) : [],
         ];
+    }
+
+    private function groupNodesByAgeGroup($nodes)
+    {
+
+        $groups = [];
+        foreach ($nodes as $node) {
+            $ageGroupId = $node['age_group']->id;
+            if (!isset($groups[$ageGroupId])) {
+                $groups[$ageGroupId] = [
+                    'id' => 'group' . $ageGroupId,
+                    'title' => $node['age_group']['name'],
+                    'min_age' => $node['age_group']['age_from'],
+                    'height' => 100,
+                    'width' => 400,
+                    'x' => 0,
+                    'y' => 0,
+                    'nodes' => []
+                ];
+            }
+
+            $groups[$ageGroupId]['nodes'][] = $node;
+        }
+
+        usort($groups, function ($a, $b) {
+            return $a['min_age'] > $b['min_age'];
+        });
+
+        return $groups;
     }
 }
