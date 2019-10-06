@@ -29,6 +29,7 @@ class GraphController extends Controller
             'nodes.dependents',
             'nodes.learnigObject',
             'nodes.learnigObject.skills',
+            'nodes.learnigObject.ageGroup'
         ])->find($id);
 
         if ($request->view) {
