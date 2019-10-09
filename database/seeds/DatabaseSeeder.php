@@ -10,7 +10,8 @@ class DatabaseSeeder extends Seeder
             PermissionsSeeder::class,
             RolesSeeder::class,
             LearningStagesSeeder::class,
-            LearningAxisSeeder::class
+            LearningAxisSeeder::class,
+            LearningObjectsSeeder::class
         ]);
     }
 }
