@@ -76,7 +76,7 @@ class GraphsSeeder extends Seeder
 
             echo "\n";
 
-            foreach($info['edges'] as $edge) {
+            foreach ($info['edges'] as $edge) {
                 $graphEdge = new GraphEdge();
                 $graphEdge->graph_id = $graph->id;
                 $graphEdge->node_from_id = $graphNodes[$edge[0]];
@@ -87,7 +87,6 @@ class GraphsSeeder extends Seeder
             }
 
             echo "\n";
-
         }
     }
 
@@ -96,7 +95,52 @@ class GraphsSeeder extends Seeder
         return [
             'PC' => [
                 'title' => 'Pensamento Computacional',
-                'edges' => []
+                'edges' => [
+                    ['01PCALGO', '03PCDEFI'],
+                    ['01PCALGO', '02PCALGO'],
+                    ['03PCDEFI', '06PCTECN'],
+                    ['03PCDEFI', '06PCINTR'],
+                    ['02PCIDEN', '03PCALGO'],
+                    ['02PCIDEN', '06PCINTR'],
+                    ['03PCINTR', '03PCALGO'],
+                    ['02PCALGO', '03PCALGO'],
+                    ['03PCALGO', '04PCALGO'],
+                    ['06PCTECN', '04PCALGO'],
+                    ['06PCTECN', '06PCTECN'],
+                    ['01PCORGA', '02PCMODE'],
+                    ['02PCMODE', '04PCESTR'],
+                    ['04PCESTR', '04PCALGO'],
+                    ['04PCESTR', '05PCESTR'],
+                    ['05PCESTR', '05PCESTR'],
+                    ['05PCESTR', '06PCTIPO'],
+                    ['04PCALGO', '05PCESTR'],
+                    ['06PCTIPO', '06PCLING'],
+                    ['06PCTIPO', '07PCAUTO'],
+                    ['06PCTIPO', '07PCESTR'],
+                    ['07PCESTR', '08PCPROG'],
+                    ['08PCPROG', '09PCESTR'],
+                    ['09PCESTR', '09PCPROG'],
+                    ['08PCPROG', '08PCPROG'],
+                    ['05PCESTR', '08PCPROG'],
+                    ['08PCPROG', '09PCPROG'],
+                    ['04PCALGO', '06PCLING'],
+                    ['06PCTECN', '06PCLING'],
+                    ['06PCTECN', '07PCTECN'],
+                    ['06PCTECN', '08PCPARA'],
+                    ['07PCTECN', '08PCTECN'],
+                    ['07PCTECN', '07PCPROG'],
+                    ['08PCTECN', '09PCTECN'],
+                    ['08PCTECN', '08PCPROG'],
+                    ['09PCTECN', '09PCPROG'],
+                    ['06PCINTR', '07PCAUTO'],
+                    ['06PCINTR', '06PCLING'],
+                    ['06PCLING', '07PCPROG'],
+                    ['07PCPROG', '07PCPROG'],
+                    ['07PCPROG', '08PCPROG'],
+                    ['07PCAUTO', '07PCPROG'],
+                    ['07PCESTR', '07PCPROG'],
+                ]
+
             ],
             'MD' => [
                 'title' => 'Mundo Digital',
@@ -106,6 +150,30 @@ class GraphsSeeder extends Seeder
                     ['01MDINFO', '03MDDADO'],
                     ['03MDDADO', '04MDCODI'],
                     ['01MDCODI', '04MDCODI'],
+                    ['01MDPROT', '06MDPROT'],
+                    ['04MDCODI', '06MDPROT'],
+                    ['04MDCODI', '07MDINTE'],
+                    ['04MDCODI', '06MDFUND'],
+                    ['06MDPROT', '07MDINTE'],
+                    ['06MDPROT', '07MDARMA'],
+                    ['01MDMAQU', '03MDDADO'],
+                    ['01MDMAQU', '04MDCODI'],
+                    ['01MDMAQU', '03MDINTE'],
+                    ['01MDMAQU', '02MDHARD'],
+                    ['01MDMAQU', '02MDNOCA'],
+                    ['03MDINTE', '05MDARQU'],
+                    ['03MDINTE', '06MDFUND'],
+                    ['02MDHARD', '05MDARQU'],
+                    ['02MDHARD', '05MDSIST'],
+                    ['02MDNOCA', '05MDSIST'],
+                    ['06MDFUND', '07MDINTE'],
+                    ['06MDFUND', '07MDARMA'],
+                    ['06MDFUND', '08MDFUND'],
+                    ['05MDARQU', '07MDARMA'],
+                    ['05MDSIST', '08MDFUND'],
+                    ['07MDARMA', '08MDFUND'],
+                    ['07MDINTE', '09MDSEGU'],
+                    ['08MDFUND', '09MDSEGU'],
                 ]
             ],
             'CD' => [
