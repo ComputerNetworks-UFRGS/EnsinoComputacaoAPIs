@@ -53,7 +53,7 @@ class GraphsSeeder extends Seeder
             $graph->description = '';
             $graph->height = 200;
             $graph->width = 500;
-            $graph->group_by_year = 1;
+            $graph->group_by_year = 0;
             $graph->save();
 
             echo "\tGraph '{$graph->title}' created.\n";
@@ -106,12 +106,12 @@ class GraphsSeeder extends Seeder
                     ['02PCALGO', '03PCALGO'],
                     ['03PCALGO', '04PCALGO'],
                     ['06PCTECN', '04PCALGO'],
-                    ['06PCTECN', '06PCTECN'],
+                    // ['06PCTECN', '06PCTECN'],
                     ['01PCORGA', '02PCMODE'],
                     ['02PCMODE', '04PCESTR'],
                     ['04PCESTR', '04PCALGO'],
                     ['04PCESTR', '05PCESTR'],
-                    ['05PCESTR', '05PCESTR'],
+                    // ['05PCESTR', '05PCESTR'],
                     ['05PCESTR', '06PCTIPO'],
                     ['04PCALGO', '05PCESTR'],
                     ['06PCTIPO', '06PCLING'],
@@ -120,7 +120,7 @@ class GraphsSeeder extends Seeder
                     ['07PCESTR', '08PCPROG'],
                     ['08PCPROG', '09PCESTR'],
                     ['09PCESTR', '09PCPROG'],
-                    ['08PCPROG', '08PCPROG'],
+                    // ['08PCPROG', '08PCPROG'],
                     ['05PCESTR', '08PCPROG'],
                     ['08PCPROG', '09PCPROG'],
                     ['04PCALGO', '06PCLING'],
@@ -135,7 +135,7 @@ class GraphsSeeder extends Seeder
                     ['06PCINTR', '07PCAUTO'],
                     ['06PCINTR', '06PCLING'],
                     ['06PCLING', '07PCPROG'],
-                    ['07PCPROG', '07PCPROG'],
+                    // ['07PCPROG', '07PCPROG'],
                     ['07PCPROG', '08PCPROG'],
                     ['07PCAUTO', '07PCPROG'],
                     ['07PCESTR', '07PCPROG'],
