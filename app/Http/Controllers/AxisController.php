@@ -8,10 +8,9 @@ use App\Models\LearningAxis;
 class AxisController extends Controller
 {
 
-
     public function list(Request $req)
     {
-        return LearningAxis::orderBy('name')->get();
+        return LearningAxis::orderBy('name', 'DESC')->get();
     }
 
 

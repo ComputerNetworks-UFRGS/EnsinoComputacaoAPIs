@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LearningAxis;
+use App\Models\LearningObject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\LearningStage;
@@ -99,26 +101,38 @@ class SkillController extends Controller
 
     public function axis()
     {
-        $skills = Skill::with([
-            'object',
-            'object.axis',
-            'ageGroup'
+        $objects = LearningObject::with([
+            'axis' => function($query) {
+                $query->select('id', 'name', 'color');
+            },
+            'ageGroup' => function($query) {
+                $query->select('id', 'code', 'name');
+            },
+            'skills' => function($query) {
+                $query->select('id', 'code', 'name', 'learning_object_id');
+            }
+        ])->select([
+            'id',
+            'name',
+            'learning_axis_id',
+            'age_group_id',
+            'ref'
         ])->get();
 
-        return $skills
-            ->groupBy(function ($item, $key) {
+        return $objects
+            ->groupBy(function ($item) {
                 return $item->ageGroup->id;
             })
-            ->transform(function ($item, $key) {
+            ->transform(function ($item) {
 
                 return [
                     'ageGroup' => $item->first()->ageGroup,
-                    'axis' => $item->groupBy(function ($item, $key) {
-                        return $item->object->axis->id;
+                    'axis' => $item->groupBy(function ($item) {
+                        return $item->axis->id;
                     })->map(function ($item, $key) {
                         return [
-                            'axis' => $item->first()->object->axis,
-                            'skills' => $item,
+                            'axis' => $item->first()->axis,
+                            'objects' => $item,
                         ];
                     }),
                 ];
