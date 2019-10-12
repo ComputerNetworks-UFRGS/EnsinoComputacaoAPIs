@@ -43,16 +43,19 @@ class LearningAxisSeeder extends Seeder
                 'name' => 'Pensamento Computacional',
                 'description' => 'Pensamento Computacional',
                 'learning_stage_code' => 'EC',
+                'color' => '#ff0000',
             ],
             [
                 'name' => 'Mundo Digital',
                 'description' => 'Mundo Digital',
                 'learning_stage_code' => 'EC',
+                'color' => '#00ff00',
             ],
             [
                 'name' => 'Cultura Digital',
                 'description' => 'Cultura Digital',
                 'learning_stage_code' => 'EC',
+                'color' => '#0000ff',
             ],
         ];
     }

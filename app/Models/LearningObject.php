@@ -17,4 +17,9 @@ class LearningObject extends Model
         return $this->belongsTo(AgeGroup::class);
     }
 
+    public function axis()
+    {
+        return $this->belongsTo(LearningAxis::class, 'learning_axis_id');
+    }
+
 }

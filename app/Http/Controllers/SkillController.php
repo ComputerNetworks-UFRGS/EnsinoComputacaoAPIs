@@ -63,7 +63,8 @@ class SkillController extends Controller
             ->join('learning_axis AS eixo', 'eixo.id', '=', 'objeto.learning_axis_id')
             ->join('learning_stages AS ls', 'ls.id', '=', 'eixo.learning_stages_id')
             ->join('age_groups AS ag', 'ag.id', '=', 's.age_group_id')
-            ->select('ag.name AS idade_nome',
+            ->select(
+                'ag.name AS idade_nome',
                 'ag.code AS idade_codigo',
                 'ag.age_from AS idade_min',
                 'ag.age_to AS idade_max',
@@ -73,12 +74,13 @@ class SkillController extends Controller
                 's.name AS habilidade_nome',
                 's.sequential_number AS habilidade_numero',
                 'eixo.name AS eixo_nome',
-                'eixo.description AS eixo_code')
+                'eixo.description AS eixo_code'
+            )
             ->orderByRaw('ag.age_from, objeto.name')
             ->get();
 
         return $skills->groupBy('idade_codigo')
-            ->map(function($item, $key) {
+            ->map(function ($item, $key) {
                 return [
                     'idade' => $item->first(),
                     'objects' => $item->groupBy('objeto_nome'),
@@ -89,10 +91,37 @@ class SkillController extends Controller
     public function tree()
     {
         return LearningStage::where('code', LearningStage::CODE_ENSINO_COMPUTACIONAL)
-            ->with(['axis', 'axis.objects' => function($join) {
+            ->with(['axis', 'axis.objects' => function ($join) {
                 $join->orderBy('name');
             }, 'axis.objects.skills'])
             ->first();
     }
 
+    public function axis()
+    {
+        $skills = Skill::with([
+            'object',
+            'object.axis',
+            'ageGroup'
+        ])->get();
+
+        return $skills
+            ->groupBy(function ($item, $key) {
+                return $item->ageGroup->id;
+            })
+            ->transform(function ($item, $key) {
+
+                return [
+                    'ageGroup' => $item->first()->ageGroup,
+                    'axis' => $item->groupBy(function ($item, $key) {
+                        return $item->object->axis->id;
+                    })->map(function ($item, $key) {
+                        return [
+                            'axis' => $item->first()->object->axis,
+                            'skills' => $item,
+                        ];
+                    }),
+                ];
+            });
+    }
 }

@@ -48,7 +48,6 @@ class SkillsSeeder extends Seeder
             $skill->learning_object_id = $object->id;
             $skill->save();
 
-
             echo "\tSkill '{$skill->code}' created.\n";
         }
     }

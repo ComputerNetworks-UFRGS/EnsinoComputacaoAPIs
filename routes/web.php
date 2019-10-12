@@ -24,6 +24,7 @@ $router->group([
 
         $router->get('/years', 'SkillController@years');
         $router->get('/tree', 'SkillController@tree');
+        $router->get('/axis', 'SkillController@axis');
 
         $router->group(['middleware' => 'auth'], function($router) {
             $router->get('/', 'SkillController@list');
