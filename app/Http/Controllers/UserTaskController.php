@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\UserTask;
 use App\Models\TaskSkill;
 use App\Models\Skill;
+use App\Models\Tag;
 use App\Http\Requests\StoreTask;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -59,7 +60,33 @@ class UserTaskController extends Controller
             $task->skills()->sync($data);
         }
 
+        $this->handleTags($task, $request->tags);
+
         return 'ok';
+    }
+
+    private function handleTags($task, $tags)
+    {
+        if($tags) {
+            $newTags = [];
+            foreach($tags as $tag) {
+                if(is_string($tag)) {
+                    $newTag = new Tag();
+                    $newTag->value = $tag;
+                    $newTag->key = $newTag->makeKey($newTag);
+                    $newTag->published = 0;
+                    $newTag->save();
+                    $newTags[] = $newTag->id;
+                }
+            }
+
+            $currentIds = array_filter($tags, function($item) {
+                return !is_string($item);
+            });
+
+            $tagsIds = array_merge($currentIds, $newTags);
+            $task->tags()->sync($tagsIds);
+        }
     }
 
     public function update(Request $request, $id)
@@ -94,6 +121,9 @@ class UserTaskController extends Controller
         }
 
         $task->save();
+
+        $this->handleTags($task, $request->tags);
+
     }
 
     public function delete($id)
@@ -131,7 +161,8 @@ class UserTaskController extends Controller
                         }
                     ]);
                 },
-                'attachments'
+                'attachments',
+                'tags',
             ])
             ->where('user_id', Auth::user()->id)
             ->find($id);

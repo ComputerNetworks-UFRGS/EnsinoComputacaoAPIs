@@ -15,6 +15,9 @@ class TagsSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
+        echo "\tErasing task_tags\n";
+        DB::table('task_tags')->truncate();
+
         echo "\tErasing tags\n";
         DB::table('tags')->truncate();
 
