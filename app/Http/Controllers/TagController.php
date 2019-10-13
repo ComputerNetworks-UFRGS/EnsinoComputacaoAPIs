@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
@@ -21,12 +22,12 @@ class TagController extends Controller
 
     public function create(Request $request)
     {
-        $this->authorize('has-permission', 'tag.add');
+        $this->authorize('has-permission', 'tag.create');
 
         $tag = new Tag();
-        $tag->name = $request->name;
-        $tag->key = $tag->makeKey($tag->name);
-        $tag->published = false;
+        $tag->value = $request->value;
+        $tag->key = $tag->makeKey($tag->value);
+        $tag->published = (int) $request->published;
         $tag->save();
     }
 
@@ -34,9 +35,9 @@ class TagController extends Controller
     {
         $this->authorize('has-permission', 'tag.edit');
         $tag = Tag::find($id);
-        $tag->name = $request->name;
-        $tag->key = $tag->makeKey($tag->name);
-        $tag->published = $request->published;
+        $tag->value = $request->value;
+        $tag->key = $tag->makeKey($tag->value);
+        $tag->published = (int) $request->published;
         $tag->save();
     }
 

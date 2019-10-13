@@ -109,6 +109,7 @@ $router->group([
 
         $router->group(['prefix' => 'tag'], function($router) {
             $router->get('/', 'TagController@list');
+            $router->get('/{id}', 'TagController@detail');
             $router->post('/', 'TagController@create');
             $router->put('/{id}', 'TagController@update');
             $router->delete('/{id}', 'TagController@delete');
