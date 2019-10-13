@@ -120,6 +120,16 @@ class PermissionsSeeder extends Seeder
                     ['curri.delete', 'Excluir'],
                 ]
             ],
+            [
+                'title' => 'Tags atividades',
+                'permissions' => [
+                    ['tag.list', 'Ver'],
+                    ['tag.detail', 'Ver detalhes'],
+                    ['tag.create', 'Criar'],
+                    ['tag.edit', 'Editar'],
+                    ['tag.delete', 'Excluir'],
+                ]
+            ],
         ];
     }
 }

@@ -106,6 +106,14 @@ $router->group([
             $router->put('/{id}/nodes', 'GraphController@updatePositions');
         });
 
+
+        $router->group(['prefix' => 'tag'], function($router) {
+            $router->get('/', 'TagController@list');
+            $router->post('/', 'TagController@create');
+            $router->put('/{id}', 'TagController@update');
+            $router->delete('/{id}', 'TagController@delete');
+        });
+
     });
 
 });

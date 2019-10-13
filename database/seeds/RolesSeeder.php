@@ -78,6 +78,11 @@ class RolesSeeder extends Seeder
                     'review.list',
                     'review.detail',
                     'review.evaluate',
+                    'tag.list',
+                    'tag.detail',
+                    'tag.create',
+                    'tag.edit',
+                    'tag.delete',
                 ]
             ],
             [
