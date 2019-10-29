@@ -39,6 +39,11 @@ $router->group([
     $router->group(['prefix' => 'graphs'], function($router) {
         $router->get('/', 'GraphController@list');
         $router->get('/{id}', 'GraphController@detail');
+        $router->get('/{id}/node/{node_id}', 'GraphController@nodeDetail');
+    });
+
+    $router->group(['prefix' => 'objects'], function($router) {
+        $router->get('/{id}', 'ObjectsController@detail');
     });
 
     $router->get('/age-groups', 'AgeGroupController@list');
@@ -105,7 +110,6 @@ $router->group([
             $router->delete('/{id}/edge/{from_id}/{to_id}', 'GraphController@deleteEdge');
             $router->put('/{id}/nodes', 'GraphController@updatePositions');
         });
-
 
         $router->group(['prefix' => 'tag'], function($router) {
             $router->get('/', 'TagController@list');

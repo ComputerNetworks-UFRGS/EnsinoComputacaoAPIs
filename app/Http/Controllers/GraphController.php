@@ -138,7 +138,7 @@ class GraphController extends Controller
     public function updatePositions(Request $request, $id)
     {
         $positions = $request->positions;
-        foreach($positions as $pos) {
+        foreach ($positions as $pos) {
             $node = GraphNode::where('graph_id', $id)->where('id', $pos['id'])->first();
             $node->position_x = $pos['x'];
             $node->position_y = $pos['y'];
@@ -146,4 +146,16 @@ class GraphController extends Controller
         }
     }
 
+    public function nodeDetail($id, $node_id)
+    {
+        return GraphNode::with([
+            'dependencies',
+            'dependents',
+            'learnigObject',
+            'learnigObject.skills',
+            'learnigObject.ageGroup'
+        ])
+            ->where('graph_id', $id)
+            ->find($node_id);
+    }
 }
