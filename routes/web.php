@@ -49,6 +49,7 @@ $router->group([
     $router->get('/age-groups', 'AgeGroupController@list');
     $router->get('/learning-stages', 'LearningStageController@list');
     $router->get('/axis', 'AxisController@list');
+    $router->get('/tags', 'TagsController@list');
 
     // Private
     $router->group(['middleware' => 'auth'], function($router) {
