@@ -9,7 +9,10 @@ class TaskController extends Controller
 {
     public function list(Request $req)
     {
-        return Task::when($req->skills, function ($query) use ($req) {
+
+        $paginated = $req->paginated;
+
+        $query = Task::when($req->skills, function ($query) use ($req) {
 
             $query->whereHas('taskSkill', function ($query) use ($req) {
                 $query->whereIn('skill_id', $req->skills);
@@ -35,8 +38,9 @@ class TaskController extends Controller
                 $query->whereIn('id', $req->tags);
             });
         })
-            ->where('status', Task::STATUS_PUBLISHED)
-            ->get();
+            ->where('status', Task::STATUS_PUBLISHED);
+
+        return $paginated ? $query->paginate(12) : $query->get();
     }
 
     public function detail($id)
