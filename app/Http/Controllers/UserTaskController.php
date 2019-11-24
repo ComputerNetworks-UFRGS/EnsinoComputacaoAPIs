@@ -41,6 +41,9 @@ class UserTaskController extends Controller
         $task->description = Purifier::clean($request->description);
         $task->is_plugged = $request->is_plugged;
         $task->status = Task::STATUS_CREATED;
+        $task->type = $request->type;
+        $task->link = $request->link;
+        $task->source = $request->source;
         $task->save();
 
         $user_task = new UserTask();
@@ -49,8 +52,8 @@ class UserTaskController extends Controller
         $user_task->role = UserTask::ROLE_OWNER;
         $user_task->save();
 
-        if($request->skills) {
-            $data = array_map(function($skill_id) {
+        if ($request->skills) {
+            $data = array_map(function ($skill_id) {
                 return [
                     'type' => TaskSkill::TYPE_PRIMARY,
                     'skill_id' => (int) $skill_id,
@@ -67,10 +70,10 @@ class UserTaskController extends Controller
 
     private function handleTags($task, $tags)
     {
-        if($tags) {
+        if ($tags) {
             $newTags = [];
-            foreach($tags as $tag) {
-                if(is_string($tag)) {
+            foreach ($tags as $tag) {
+                if (is_string($tag)) {
                     $newTag = new Tag();
                     $newTag->value = $tag;
                     $newTag->key = $newTag->makeKey($newTag);
@@ -80,7 +83,7 @@ class UserTaskController extends Controller
                 }
             }
 
-            $currentIds = array_filter($tags, function($item) {
+            $currentIds = array_filter($tags, function ($item) {
                 return !is_string($item);
             });
 
@@ -98,10 +101,13 @@ class UserTaskController extends Controller
         $task->title = $request->title;
         $task->description = $request->description;
         $task->is_plugged = $request->is_plugged;
+        $task->type = $request->type;
+        $task->link = $request->link;
+        $task->source = $request->source;
 
-        if($task->status == Task::STATUS_DENIED_NEED_FIX) {
+        if ($task->status == Task::STATUS_DENIED_NEED_FIX) {
             $task->status = Task::STATUS_REVIEWED;
-        } else if($task->status == Task::STATUS_PUBLISHED) {
+        } else if ($task->status == Task::STATUS_PUBLISHED) {
 
             if (!Gate::allows('has-permission', 'task.no_review')) {
                 $task->status = Task::STATUS_FOR_REVIEW;
@@ -109,8 +115,8 @@ class UserTaskController extends Controller
             }
         }
 
-        if($request->skills) {
-            $data = array_map(function($skill_id) {
+        if ($request->skills) {
+            $data = array_map(function ($skill_id) {
                 return [
                     'type' => TaskSkill::TYPE_PRIMARY,
                     'skill_id' => (int) $skill_id,
@@ -123,7 +129,6 @@ class UserTaskController extends Controller
         $task->save();
 
         $this->handleTags($task, $request->tags);
-
     }
 
     public function delete($id)
@@ -140,7 +145,7 @@ class UserTaskController extends Controller
         $task = Auth::user()
             ->tasks()
             ->with([
-                'skills' => function($join) {
+                'skills' => function ($join) {
                     $join->select([
                         'id AS habilidade_id',
                         'code AS habilidade_codigo',
@@ -148,15 +153,15 @@ class UserTaskController extends Controller
                         'age_group_id'
                     ]);
                     $join->with([
-                        'ageGroup' => function($join) {
+                        'ageGroup' => function ($join) {
                             $join->select(['id', 'name']);
                         }
                     ]);
                 },
-                'reviews' => function($join) {
+                'reviews' => function ($join) {
                     $join->orderBy('id', 'DESC');
                     $join->with([
-                        'user' => function($join) {
+                        'user' => function ($join) {
                             $join->select(['id', 'name']);
                         }
                     ]);
@@ -179,14 +184,11 @@ class UserTaskController extends Controller
             $task->status = Task::STATUS_PUBLISHED;
             $task->save();
         } else {
-            if($task->status == Task::STATUS_CREATED || $task->status == Task::STATUS_REVIEWED) {
+            if ($task->status == Task::STATUS_CREATED || $task->status == Task::STATUS_REVIEWED) {
                 $task->status = Task::STATUS_FOR_REVIEW;
                 // TODO: notificar curadores...
                 $task->save();
             }
         }
-
-
     }
-
 }

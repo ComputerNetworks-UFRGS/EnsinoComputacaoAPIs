@@ -66,4 +66,9 @@ class TaskController extends Controller
 
         return $task;
     }
+
+    public function getTypes()
+    {
+        return Task::getTypeLabels();
+    }
 }

@@ -17,6 +17,7 @@ $router->group([
 
     $router->group(['prefix' => 'tasks'], function($router) {
         $router->get('/', 'TaskController@list');
+        $router->get('/types', 'TaskController@getTypes');
         $router->get('/{id}', 'TaskController@detail');
     });
 

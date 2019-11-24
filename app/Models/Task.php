@@ -9,6 +9,7 @@ use App\Models\UserTask;
 class Task extends Model
 {
     const TYPE_BASIC = 1;
+    const TYPE_LINK = 2;
 
     const STATUS_CREATED = 0;
     const STATUS_FOR_REVIEW = 1;
@@ -64,7 +65,6 @@ class Task extends Model
             ->first();
 
         if($user_task) {
-            $user_id = $user_task->user_id;
             return User::find($user_task->user_id)->only([
                 'id',
                 'name'
@@ -76,6 +76,14 @@ class Task extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'task_tags', 'task_id', 'tag_id');
+    }
+
+    public static function getTypeLabels()
+    {
+        return [
+            self::TYPE_BASIC => 'criar',
+            self::TYPE_LINK => 'referência externa',
+        ];
     }
 
 }
