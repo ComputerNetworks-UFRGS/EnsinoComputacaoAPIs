@@ -96,7 +96,7 @@ class RolesSeeder extends Seeder
                     'task.delete',
                     'task.no_review',
                 ],
-                'default' => true,
+                'default' => false,
             ],
             [
                 'title' => 'Criador',
