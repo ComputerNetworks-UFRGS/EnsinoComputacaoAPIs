@@ -134,7 +134,7 @@ class SkillController extends Controller
                             'axis' => $item->first()->axis,
                             'objects' => $item,
                         ];
-                    }),
+                    })
                 ];
             });
     }

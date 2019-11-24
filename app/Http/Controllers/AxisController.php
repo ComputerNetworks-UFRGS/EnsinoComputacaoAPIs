@@ -10,7 +10,7 @@ class AxisController extends Controller
 
     public function list(Request $req)
     {
-        return LearningAxis::orderBy('name', 'DESC')->get();
+        return LearningAxis::orderBy('print_order', 'ASC')->get();
     }
 
 
