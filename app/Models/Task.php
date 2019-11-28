@@ -81,7 +81,7 @@ class Task extends Model
     public static function getTypeLabels()
     {
         return [
-            self::TYPE_BASIC => 'criar',
+            self::TYPE_BASIC => 'criar nova atividade',
             self::TYPE_LINK => 'referência externa',
         ];
     }
