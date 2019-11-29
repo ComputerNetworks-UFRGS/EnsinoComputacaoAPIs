@@ -123,4 +123,21 @@ $router->group([
 
     });
 
+    $router->get('/temp', function() {
+
+        $tasks = \App\Models\Task::get();
+        $skills = \App\Models\Skill::get()->pluck('id')->toArray();
+
+        foreach($tasks as $task) {
+
+            $ts = new \App\Models\TaskSkill();
+            $ts->task_id = $task->id;
+            $ts->skill_id = $skills[rand(0, count($skills) - 1)];
+            $ts->type = 1;
+            $ts->save();
+        }
+
+
+    });
+
 });
