@@ -12,7 +12,19 @@ class TaskController extends Controller
 
         $paginated = $req->paginated;
 
-        $query = Task::when($req->skills, function ($query) use ($req) {
+        $query = Task::select([
+            'id',
+            'title',
+            'type',
+            'created_at',
+            'updated_at',
+            'is_plugged',
+            'status',
+            'cover',
+            'source',
+            'link',
+        ])
+        ->when($req->skills, function ($query) use ($req) {
 
             $query->whereHas('taskSkill', function ($query) use ($req) {
                 $query->whereIn('skill_id', $req->skills);
