@@ -10,7 +10,6 @@ class TagController extends Controller
 
     public function list(Request $req)
     {
-        $this->authorize('has-permission', 'tag.list');
         return Tag::orderBy('value')->get();
     }
 
